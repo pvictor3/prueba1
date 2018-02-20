@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#9E9E9E</color>
+    <color name="colorPrimaryDark">#616161</color>
+    <color name="colorSecondaryDark">#424242</color>
+    <color name="SecondarycolorAccent">#2aaeea</color>
+    <color name="colorAccent">#4CAF50</color>
+    <color name="textColorPrimary">#000000</color>
+    <color name="texColorSecondary">#b6b6b6</color>
+    <color name="texColorPrimaryDark">#000000</color>
+    <color name="windowBackground">#FFFFFF</color>
+    <color name="navigationBarColor">#3a4989</color>
+    <color name="primary_text">#212121</color>
+    <color name="main1">#212121</color>
+    <color name="iron">#CCCCCC</color>
+    <color name="white">#FFFFFF</color>
+    <color name="aluminum">#E43F3F</color>
+    <color name="green">#15c22c</color>
+    <color name="transparent">#80000000</color>
+    <color name="nose">#9E9E9E</color>
+    <color name="pink">#fb1cff</color>
+    <color name="gris_claro">#f2f2f2</color>
+</resources>
