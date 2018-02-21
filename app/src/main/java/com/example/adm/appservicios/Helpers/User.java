@@ -6,16 +6,17 @@ package com.example.adm.appservicios.Helpers;
 
 public class User {
 
-    private String uid, Nombre, Telefono, Contrasena;
+    private String uid, Nombre, Telefono, Contrasena, Tipo;
 
     public User() {
     }
 
-    public User(String uid, String nombre, String telefono, String contrasena) {
-        this.uid = uid; // Primary Key
-        Nombre = nombre;
-        Telefono = telefono;
-        Contrasena = contrasena;
+    public User(String uid, String nombre, String telefono, String contrasena, String tipo) {
+        this.uid = uid;
+        this.Nombre = nombre;
+        this.Telefono = telefono;
+        this.Contrasena = contrasena;
+        this.Tipo = tipo;
     }
 
     public String getUid() {
@@ -48,5 +49,13 @@ public class User {
 
     public void setContrasena(String contrasena) {
         Contrasena = contrasena;
+    }
+
+    public String getTipo() {
+        return Tipo;
+    }
+
+    public void setTipo(String tipo) {
+        Tipo = tipo;
     }
 }

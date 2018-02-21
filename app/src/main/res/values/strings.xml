@@ -5,4 +5,14 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+
+    <!-- Menu -->
+    <string name="builder">Persona de oficio</string>
+    <string name="info">Acerca de&#8230;</string>
+
+    <!-- Side_Bar -->
+    <string name="Logout">Cerrar Sesión</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
