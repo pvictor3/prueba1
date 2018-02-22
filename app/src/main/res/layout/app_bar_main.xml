@@ -8,6 +8,7 @@
     tools:context="com.example.adm.appservicios.Activity.MainActivity">
 
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/idBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
@@ -21,7 +22,13 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <AutoCompleteTextView
+    <FrameLayout
+        android:layout_marginTop="60dp"
+        android:id="@+id/flcontent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></FrameLayout>
+
+    <!--<AutoCompleteTextView
         android:id="@+id/main_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -37,6 +44,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_search_white_24dp"/>
+        app:srcCompat="@drawable/ic_search_white_24dp"/>-->
 
 </android.support.design.widget.CoordinatorLayout>

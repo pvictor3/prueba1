@@ -91,4 +91,12 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
         Log.i("informacion", "New user inserted into sqlite" +id);
     }
+
+    /**
+     * RE create database Delete all tables and create them again
+     */
+    public void deleteUsers(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        onUpgrade(db, 1,1);
+    }
 }

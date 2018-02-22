@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.adm.appservicios.Database.SQLiteHandler;
 import com.example.adm.appservicios.R;
@@ -80,20 +81,15 @@ public class IndexActivity extends AppCompatActivity {
                 showLoginDialog();
             }
         });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
 
         /*Declaracion de session */
         SharedPreferences settings = getSharedPreferences("sesion_user", MODE_PRIVATE);
 
-        Log.i("Session nombre: ", settings.getString("Nombreusuario",""));
+        /*Log.i("Session nombre: ", settings.getString("Nombreusuario",""));
         Log.i("Session Telefono: ", settings.getString("Telefonousuario",""));
         Log.i("Session UID: ", settings.getString("UIDusuario",""));
         Log.i("Session Tipo_user: ", settings.getString("Tipousuario",""));
-        Log.i("Session Logueado: ", settings.getString("Logueadousuario",""));
+        Log.i("Session Logueado: ", settings.getString("Logueadousuario",""));*/
 
         if (Boolean.parseBoolean(settings.getString("Logueadousuario","")))
         {

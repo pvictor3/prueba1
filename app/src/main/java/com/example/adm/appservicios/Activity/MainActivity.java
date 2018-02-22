@@ -1,5 +1,6 @@
 package com.example.adm.appservicios.Activity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -8,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,13 +19,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.example.adm.appservicios.Database.SQLiteHandler;
 import com.example.adm.appservicios.Fragments.IndexFragment;
+import com.example.adm.appservicios.Fragments.PagosFragment;
+import com.example.adm.appservicios.Fragments.ProfileFragment;
 import com.example.adm.appservicios.Fragments.ServicesFragment;
+import com.example.adm.appservicios.Fragments.UbicacionesFragment;
 import com.example.adm.appservicios.R;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    Fragment fragment = null;
+    Class fragmentclass = null;
+    FragmentManager fragmentManager = getSupportFragmentManager();
+
+    private SQLiteHandler datab;
 
 
     @Override
@@ -42,20 +56,62 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        /*Declaracion de session */
+        SharedPreferences settings = getSharedPreferences("sesion_user", MODE_PRIVATE);
+
+        Log.i("Session nombre ", settings.getString("Nombreusuario",""));
+        Log.i("Session Telefono ", settings.getString("Telefonousuario",""));
+        Log.i("Session UID ", settings.getString("UIDusuario",""));
+        Log.i("Session Tipo_user ", settings.getString("Tipousuario",""));
+        Log.i("Session Logueado ", settings.getString("Logueadousuario",""));
+
+        /*Obtener vista nav_header para asignar texto a los titulos*/
+        LayoutInflater inflater     = LayoutInflater.from(this);
+        View navheader_layout       = inflater.inflate(R.layout.nav_header_main, null);
+
+        final TextView TituloNombre = navheader_layout.findViewById(R.id.textViewNameOnNavigation);
+        final TextView TituloPerfil = navheader_layout.findViewById(R.id.tipo_de_perfil);
+        final ImageView ImagePerfil = navheader_layout.findViewById(R.id.navViewImageView_ProfilePicture);
+
+        ImagePerfil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                redirectAccount();
+            }
+        });
+
+        String name1 = settings.getString("Nombreusuario", "default value");
+
+        /*Asignacion de textos a titulos*/
+        TituloNombre.setText(name1);
+        TituloPerfil.setText(settings.getString("Tipousuario",""));
+
+        /*Inicializacion de SQLite*/
+        datab = new SQLiteHandler(getBaseContext());
+
+        /*Inicializacion de fragment default index*/
+        fragmentclass = IndexFragment.class;
+
+        try{
+            fragment = (Fragment) fragmentclass.newInstance();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+
+        fragmentManager.beginTransaction().replace(R.id.flcontent, fragment).commit();
+
+    }
+
+    public void redirectAccount(){
+        Log.i("Click", "Image");
+        Intent intent = new Intent(MainActivity.this, ProfileFragment.class);
+        startActivity(intent);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        /*Declaracion de session */
-        SharedPreferences settings = getSharedPreferences("sesion_user", MODE_PRIVATE);
-
-        Log.i("Session nombre: ", settings.getString("Nombreusuario",""));
-        Log.i("Session Telefono: ", settings.getString("Telefonousuario",""));
-        Log.i("Session UID: ", settings.getString("UIDusuario",""));
-        Log.i("Session Tipo_user: ", settings.getString("Tipousuario",""));
-        Log.i("Session Logueado: ", settings.getString("Logueadousuario",""));
 
     }
 
@@ -85,10 +141,10 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            logoutUser();
         }
 
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -97,26 +153,19 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        Fragment fragment = null;
-        Class fragmentclass = null;
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-
         if (id == R.id.nav_home) {
             // Handle the camera action
-            Log.i("Click", "home");
             fragmentclass = IndexFragment.class;
 
         } else if (id == R.id.nav_services) {
             // Handle the camera action
-            Log.i("Click", "services");
             fragmentclass = ServicesFragment.class;
 
         } else if (id == R.id.nav_pagos) {
-            fragmentclass = ServicesFragment.class;
+            fragmentclass = PagosFragment.class;
 
         } else if (id == R.id.nav_ubicacion) {
-            fragmentclass = ServicesFragment.class;
+            fragmentclass = UbicacionesFragment.class;
 
         } else if (id == R.id.nav_builder) {
             fragmentclass = ServicesFragment.class;
@@ -138,5 +187,27 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void logoutUser() {
+        /*Declaracion de session */
+        SharedPreferences settings = getSharedPreferences("sesion_user", MODE_PRIVATE);
+
+        SharedPreferences.Editor editor;
+        editor = settings.edit();
+        editor.putString("Nombreusuario" , "");
+        editor.putString("Telefonousuario" , "");
+        editor.putString("UIDusuario" , "");
+        editor.putString("Tipousuario" , "");
+        editor.putString("Logueadousuario" , "false");
+
+        editor.apply();
+
+        datab.deleteUsers();
+
+        // Launching the login activity
+        Intent intent = new Intent(getApplicationContext(), IndexActivity.class);
+        startActivity(intent);
+        finish();
     }
 }
