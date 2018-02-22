@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.example.adm.appservicios.Database.SQLiteHandler;
 import com.example.adm.appservicios.Fragments.IndexFragment;
+import com.example.adm.appservicios.Fragments.MenuServicesFragment;
 import com.example.adm.appservicios.Fragments.PagosFragment;
 import com.example.adm.appservicios.Fragments.ProfileFragment;
 import com.example.adm.appservicios.Fragments.ServicesFragment;
@@ -159,7 +160,7 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_services) {
             // Handle the camera action
-            fragmentclass = ServicesFragment.class;
+            fragmentclass = MenuServicesFragment.class;
 
         } else if (id == R.id.nav_pagos) {
             fragmentclass = PagosFragment.class;

@@ -1,0 +1,70 @@
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.example.adm.appservicios.Fragments.MenuServicesFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/bar1"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_margin="30dp">
+
+            <ImageView
+                android:id="@+id/imageView_pedirServicio"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:src="@drawable/pedir_servicio"
+                android:scaleType="centerCrop"/>
+            <TextView
+                android:id="@+id/txtView_solicitar_servicio"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Solicitar servicio"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="20dp"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/actionbar_gradient_dark" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_below="@+id/bar1"
+            android:id="@+id/bar2"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_margin="30dp">
+
+            <ImageView
+                android:id="@+id/imageView_misServicios"
+                android:src="@drawable/servicios_solicitados"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:scaleType="centerCrop"/>
+            <TextView
+                android:id="@+id/txtView_mis_servicios"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Mis Servicios"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="20dp"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/actionbar_gradient_dark" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</FrameLayout>

@@ -34,18 +34,20 @@ public class IndexFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
+        Log.i("Vista creada", " onMapReady");
         mMap.getUiSettings().setMapToolbarEnabled(false);
         mMap.getUiSettings().setZoomControlsEnabled(false);
         setCurretPosition();
     }
 
     public void setCurretPosition(){
+        Log.i("Vista creada", " setCurretPosition");
         LatLng marker = new LatLng(19.33978502, -99.19086277 );
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker, 15));
     }
 
     public void placeMarker (LatLng point, int pos, String Nombre) {
+        Log.i("Vista creada", " placeMarker");
         if (mMap != null) {
             if (pos == 0){
                 mMap.clear();
