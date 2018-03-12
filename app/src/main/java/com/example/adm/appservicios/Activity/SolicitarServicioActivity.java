@@ -3,6 +3,7 @@ package com.example.adm.appservicios.Activity;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,7 +14,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Build;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -29,6 +32,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.webkit.MimeTypeMap;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,6 +41,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.adm.appservicios.Database.SQLiteHandler;
+import com.example.adm.appservicios.Helpers.Address;
 import com.example.adm.appservicios.Helpers.CheatSheet;
 import com.example.adm.appservicios.R;
 import com.google.android.gms.common.ConnectionResult;
@@ -50,6 +55,8 @@ import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -57,6 +64,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.mvc.imagepicker.ImagePicker;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
@@ -66,6 +77,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -78,17 +90,22 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
 
     private CardView card_servicio;
     private TextView txtView_Servicio, txtView_Address;
-    private EditText editText_descripcion, editText_min, editText_max;
+    EditText editText_descripcion, editText_min, editText_max;
     private ImageView imageView_addphoto, ic_save_on_adddress, iconHelpService, iconHelpDescription, iconHelpPhoto, iconHelpLocation, iconHelpMoney;
     private Button button_agregar_ubicacion, button_ubicacion_existente, button_enviar;
     TextView editText_address, editText_tituloAddress;
     private ProgressDialog pDialog;
     Double latpos, lngpos;
+    private Bitmap bitmap;
+
+    String descripcionString, tituloString;
 
     final static int MY_PERMISSION_FINE_LOCATION = 101;
     final static int PLACE_PICKER_REQUEST = 1;
     GoogleApiClient mClient;
     Context mContext;
+
+    private Uri filePath;
 
     //LinearLayout
     LinearLayout linearLayour_horizontal;
@@ -200,15 +217,15 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
             @Override
             public void onClick(View v) {
                 Log.i("click", "click save");
-                String tituloString = editText_tituloAddress.getText().toString();
-                String descripcionString = editText_address.getText().toString();
+                tituloString = editText_tituloAddress.getText().toString();
+                descripcionString = editText_address.getText().toString();
 
-                Log.i("titulo", tituloString);
-                Log.i("descripcion", descripcionString);
-                Log.i("latpos", String.valueOf(latpos));
-                Log.i("lngpos", String.valueOf(lngpos));
+//                Log.i("titulo", tituloString);
+//                Log.i("descripcion", descripcionString);
+//                Log.i("latpos", String.valueOf(latpos));
+//                Log.i("lngpos", String.valueOf(lngpos));
 
-                Log.i("Nuevo usuario", "creando...");
+                Log.i("Nueva direccion", "creando...");
                 Map<String, Object> address = new HashMap<>();
                 address.put("User", settings.getString("UIDusuario",""));
                 address.put("Titulo", tituloString);
@@ -245,7 +262,6 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
                             }
                         });
 
-//                addNewAddress(tituloString, descripcionString, latpos, lngpos);
             }
         });
 
@@ -253,11 +269,16 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
         imageView_addphoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ImagePicker.pickImage(SolicitarServicioActivity.this, "Sube una foto:");
+//                ImagePicker.pickImage(SolicitarServicioActivity.this, "Sube una foto:");
+                final int PICK_IMAGE_REQUEST = 71;
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
             }
         });
 
-        /*Seleccionar ubicacion guardar de base de datos*/
+        /*Seleccionar ubicacion para guardar en base de datos*/
         button_ubicacion_existente.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -279,11 +300,6 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
                                     for (DocumentSnapshot doc : value) {
 
                                         Log.i("Direccion", doc.getString("Direccion"));
-                                        /*Log.i("id", doc.getId());
-                                        Log.i("Nombre", doc.getString("Nombre"));
-                                        Log.i("Telefono", doc.getString("Telefono"));
-                                        Log.i("Contrasena", doc.getString("Contrasena"));*/
-
 
                                         arrayAdapter.add(doc.getString("Direccion"));
 
@@ -306,11 +322,11 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
                                             final String strName = arrayAdapter.getItem(which);
                                             AlertDialog.Builder builderInner = new AlertDialog.Builder(SolicitarServicioActivity.this);
                                             builderInner.setMessage(strName);
-                                            builderInner.setTitle("Your Selected Item is");
+                                            builderInner.setTitle("Direccion Seleccionada");
                                             builderInner.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                                 @Override
                                                 public void onClick(DialogInterface dialog,int which) {
-                                                    txtView_Servicio.setText(strName);
+                                                    txtView_Address.setText(strName);
                                                     dialog.dismiss();
                                                 }
                                             });
@@ -321,6 +337,18 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
 
                                 } else {
                                     Log.i("Error", "No existe Direcciones para el usuario");
+                                    AlertDialog.Builder builder;
+                                    builder = new AlertDialog.Builder(SolicitarServicioActivity.this);
+                                    builder.setTitle("Direcciones")
+                                            .setMessage("No tienes direcciones disponibles.")
+                                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    // continue with delete
+                                                    dialog.dismiss();
+                                                }
+                                            })
+                                            .setIcon(android.R.drawable.ic_dialog_alert)
+                                            .show();
                                 }
 
                             }
@@ -328,11 +356,65 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
             }
         });
 
+        /*Click para guardar servicio en base de datos*/
         button_enviar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.i("Click", "Enviar");
-//                onEnviar();
+
+                editText_min 				= (EditText) findViewById(R.id.editText_Min);
+                editText_max 				= (EditText) findViewById(R.id.editText_Max);
+
+                Log.i("Servicio ", txtView_Servicio.getText().toString());
+                Log.i("Descripcion ", editText_descripcion.getText().toString());
+                Log.i("Direccion ", txtView_Address.getText().toString());
+                Log.i("lat ", String.valueOf(latpos));
+                Log.i("lng ", String.valueOf(lngpos));
+                Log.i("Min ", editText_min.getText().toString());
+                Log.i("Max ", editText_max.getText().toString());
+
+                Log.i("Nuevo servicio", "creando...");
+                Map<String, Object> services = new HashMap<>();
+                services.put("idusuario", settings.getString("UIDusuario",""));
+                services.put("Descripcion", editText_descripcion.getText().toString());
+                services.put("Direccion", txtView_Address.getText().toString());
+                services.put("Servicio", txtView_Servicio.getText().toString());
+                services.put("Min", editText_min.getText().toString());
+                services.put("Max", editText_max.getText().toString());
+
+                String x = getImages();
+                Log.i("image ", x);
+
+//                DatabaseReference mDatabase;
+//// ...
+//                mDatabase = FirebaseDatabase.getInstance().getReference();
+//
+//                Address user = new Address(settings.getString("UIDusuario",""), txtView_Servicio.getText().toString(), editText_descripcion.getText().toString(), String.valueOf(latpos), String.valueOf(lngpos));
+//
+//                mDatabase.child("address").setValue(user);
+
+//                /*Guardar en base de Datos*/
+//                final SpotsDialog waitingDialog = new SpotsDialog(SolicitarServicioActivity.this);
+//                waitingDialog.show();
+//
+//                // Agregar nuevo documento a Base de Datos
+//                db.collection("services")
+//                        .add(services)
+//                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//                            @Override
+//                            public void onSuccess(DocumentReference documentReference) {
+//                                Log.i("Informacion", "Servicio agregado a base de datos" + documentReference.getId());
+//                                waitingDialog.dismiss();
+//
+//                            }
+//                        })
+//                        .addOnFailureListener(new OnFailureListener() {
+//                            @Override
+//                            public void onFailure(@NonNull Exception e) {
+//                                Log.i("informacion", "Error adding document", e);
+//                                waitingDialog.dismiss();
+//                            }
+//                        });
             }
         });
     }
@@ -352,30 +434,45 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        bitmap = ImagePicker.getImageFromResult(this, requestCode, resultCode,data);
-//        if(bitmap != null){
-//            iconHelpPhoto.setVisibility(View.GONE);
-//            ImageView image = new ImageView(getApplicationContext());
-//            image.setImageBitmap(bitmap);
-//            float width = getResources().getDimension(R.dimen.image_widht);
-//            Integer x = Math.round(width);
-//            image.setLayoutParams(new ActionBar.LayoutParams(x, ActionBar.LayoutParams.MATCH_PARENT));
-//            View linearlayout = findViewById(R.id.linearLayour_horizontalPhotos);
-//            ((LinearLayout) linearlayout).addView(image, 0);
-//        }
-//        InputStream is = ImagePicker.getInputStreamFromResult(this, requestCode, resultCode, data);
-//        if (is != null) {
-//            //textView.setText("Got input stream!");
-//            try {
-//                is.close();
-//            } catch (IOException ex) {
-//                // ignore
-//            }
-//        } else {
-//            //textView.setText("Failed to get input stream!");
-//        }
+        bitmap = ImagePicker.getImageFromResult(this, requestCode, resultCode,data);
+
+        if(bitmap != null){
+            iconHelpPhoto.setVisibility(View.GONE);
+            ImageView image = new ImageView(getApplicationContext());
+            image.setImageBitmap(bitmap);
+            float width = getResources().getDimension(R.dimen.image_widht);
+            Integer x = Math.round(width);
+            image.setLayoutParams(new ActionBar.LayoutParams(x, ActionBar.LayoutParams.MATCH_PARENT));
+            View linearlayout = findViewById(R.id.linearLayour_horizontalPhotos);
+            ((LinearLayout) linearlayout).addView(image, 0);
+        }
+        InputStream is = ImagePicker.getInputStreamFromResult(this, requestCode, resultCode, data);
+        if (is != null) {
+            //textView.setText("Got input stream!");
+            try {
+                is.close();
+            } catch (IOException ex) {
+                // ignore
+            }
+        } else {
+            //textView.setText("Failed to get input stream!");
+        }
 
         super.onActivityResult(requestCode, resultCode, data);
+
+        Uri FilePathUri;
+        FilePathUri = data.getData();
+        Log.i("image uri: " , String.valueOf(FilePathUri));
+//        StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("All_Image_Uploads"  + settings.getString("UIDusuario","") +  + System.currentTimeMillis() + "." + GetFileExtension(FilePathUri));
+////        Uri file = Uri.fromFile(new File(String.valueOf(FilePathUri + "." + GetFileExtension(FilePathUri))));
+//
+//        UploadTask uploadTask = storageRef.putFile(FilePathUri);
+//        uploadTask.addOnProgressListener(new OnProgressListener() {
+//            @Override
+//            public void onProgress(Object o) {
+//
+//            }
+//        });
 
         if (requestCode == PLACE_PICKER_REQUEST){
             Log.i("Data place_picker: " , "place_picker");
@@ -398,6 +495,18 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
 
             }
         }
+    }
+
+    // Creating Method to get the selected image file Extension from File Path URI.
+    public String GetFileExtension(Uri uri) {
+
+        ContentResolver contentResolver = getContentResolver();
+
+        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+
+        // Returning the file Extension.
+        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri)) ;
+
     }
 
     /*Inicializacion de Firebase*/
@@ -459,11 +568,13 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
             String image = imageToString(bitmap);
             imagenes.put(image);
         }
+
         try {
             jsonObject.put("fotos", imagenes);
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
         String photos_for_send = jsonObject.toString();
         return photos_for_send;
     }
