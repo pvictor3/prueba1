@@ -1,5 +1,6 @@
 package com.example.adm.appservicios.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
@@ -9,6 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import com.example.adm.appservicios.Activity.MainActivity;
+import com.example.adm.appservicios.Activity.MisServiciosActivity;
+import com.example.adm.appservicios.Activity.SolicitarServicioActivity;
 import com.example.adm.appservicios.R;
 
 public class MenuServicesFragment extends Fragment {
@@ -28,14 +32,18 @@ public class MenuServicesFragment extends Fragment {
         card1.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("Click", "Card1");
+//                Log.i("Click", "Card1");
+                Intent intent = new Intent(getActivity(), SolicitarServicioActivity.class);
+                startActivity(intent);
             }
         });
 
         card2.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("Click", "Card2");
+//                Log.i("Click", "Card2");
+                Intent intent = new Intent(getActivity(), MisServiciosActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -45,7 +53,7 @@ public class MenuServicesFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         // Setup any handles to view objects here
-        Log.i("Vista creada", " Menu Services");
+//        Log.i("Vista creada", " Menu Services");
 
     }
 }

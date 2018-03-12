@@ -113,7 +113,7 @@ public class IndexActivity extends AppCompatActivity {
         Log.i("Success", "data");
     }
 
-
+    /*Registrar*/
     private void showRegisterdialog() {
 
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
@@ -190,7 +190,7 @@ public class IndexActivity extends AppCompatActivity {
                         .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
-                                Log.i("Informacion", "DocumentSnapshot added with ID: " + documentReference.getId());
+                                Log.i("Informacion", "Documento anadido a base de datos" + documentReference.getId());
                                 waitingDialog.dismiss();
                             }
                         })
@@ -217,6 +217,7 @@ public class IndexActivity extends AppCompatActivity {
 
     }
 
+    /*Entrar*/
     private void showLoginDialog() {
         /*Crear alert*/
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);

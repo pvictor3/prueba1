@@ -2,9 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/AppServicios.iml" filepath="$PROJECT_DIR$/AppServicios.iml" />
+      <module fileurl="file://C:\Users\Adm\Documents\Autodesk\AppServiciosFire\AppServicios.iml" filepath="C:\Users\Adm\Documents\Autodesk\AppServiciosFire\AppServicios.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AppServiciosFire.iml" filepath="$PROJECT_DIR$/AppServiciosFire.iml" />
       <module fileurl="file://C:\Users\Adm\Documents\Bimtech\AppServicios\AppServiciosFire.iml" filepath="C:\Users\Adm\Documents\Bimtech\AppServicios\AppServiciosFire.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://C:\Users\Adm\Documents\Autodesk\AppServiciosFire\app\app.iml" filepath="C:\Users\Adm\Documents\Autodesk\AppServiciosFire\app\app.iml" />
     </modules>
   </component>
 </project>

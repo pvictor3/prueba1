@@ -30,13 +30,18 @@ import com.example.adm.appservicios.Fragments.ProfileFragment;
 import com.example.adm.appservicios.Fragments.ServicesFragment;
 import com.example.adm.appservicios.Fragments.UbicacionesFragment;
 import com.example.adm.appservicios.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
 
     Fragment fragment = null;
     Class fragmentclass = null;
     FragmentManager fragmentManager = getSupportFragmentManager();
+    public static GoogleMap mMap;
 
     private SQLiteHandler datab;
 
@@ -188,6 +193,20 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        Log.i("Info->", "OnMapReady");
+        mMap = googleMap;
+        mMap.getUiSettings().setMapToolbarEnabled(false);
+        mMap.getUiSettings().setZoomControlsEnabled(false);
+        setCurretPosition();
+    }
+
+    public void setCurretPosition(){
+        LatLng marker = new LatLng(19.33978502, -99.19086277 );
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker, 15));
     }
 
     private void logoutUser() {
