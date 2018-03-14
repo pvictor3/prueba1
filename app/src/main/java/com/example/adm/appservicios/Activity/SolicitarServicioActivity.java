@@ -295,6 +295,7 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
 
                                     /*Declaracion inicial de arrayadpater*/
                                     final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(SolicitarServicioActivity.this, android.R.layout.select_dialog_singlechoice);
+                                    final ArrayAdapter<String> arrayAdapter2 = new ArrayAdapter<String>(SolicitarServicioActivity.this, android.R.layout.select_dialog_singlechoice);
 
                                     /*Recorrido de datos*/
                                     for (DocumentSnapshot doc : value) {
@@ -302,6 +303,7 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
                                         Log.i("Direccion", doc.getString("Direccion"));
 
                                         arrayAdapter.add(doc.getString("Direccion"));
+                                        arrayAdapter2.add(doc.getString("Lat") + "," + doc.getString("Lng"));
 
                                     }
 
@@ -319,7 +321,16 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
                                     builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            final String strName = arrayAdapter.getItem(which);
+                                            final String strName    = arrayAdapter.getItem(which);
+                                            final String LatLng     = arrayAdapter2.getItem(which);
+
+                                            Log.i("Position sel " , LatLng);
+                                            String[] separated = LatLng.split(",");
+                                            Log.i("Position sel " , separated[0]);
+                                            Log.i("Position sel " , separated[1]);
+                                            latpos = Double.parseDouble(separated[0]);
+                                            lngpos = Double.parseDouble(separated[1]);
+
                                             AlertDialog.Builder builderInner = new AlertDialog.Builder(SolicitarServicioActivity.this);
                                             builderInner.setMessage(strName);
                                             builderInner.setTitle("Direccion Seleccionada");
@@ -381,40 +392,43 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
                 services.put("Servicio", txtView_Servicio.getText().toString());
                 services.put("Min", editText_min.getText().toString());
                 services.put("Max", editText_max.getText().toString());
+                services.put("Lat", latpos);
+                services.put("Lng", lngpos);
 
                 String x = getImages();
                 Log.i("image ", x);
 
-//                DatabaseReference mDatabase;
-//// ...
+                DatabaseReference mDatabase;
+// ...
+                /*Save database realtime database*/
 //                mDatabase = FirebaseDatabase.getInstance().getReference();
 //
 //                Address user = new Address(settings.getString("UIDusuario",""), txtView_Servicio.getText().toString(), editText_descripcion.getText().toString(), String.valueOf(latpos), String.valueOf(lngpos));
-//
+
 //                mDatabase.child("address").setValue(user);
 
-//                /*Guardar en base de Datos*/
-//                final SpotsDialog waitingDialog = new SpotsDialog(SolicitarServicioActivity.this);
-//                waitingDialog.show();
-//
-//                // Agregar nuevo documento a Base de Datos
-//                db.collection("services")
-//                        .add(services)
-//                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-//                            @Override
-//                            public void onSuccess(DocumentReference documentReference) {
-//                                Log.i("Informacion", "Servicio agregado a base de datos" + documentReference.getId());
-//                                waitingDialog.dismiss();
-//
-//                            }
-//                        })
-//                        .addOnFailureListener(new OnFailureListener() {
-//                            @Override
-//                            public void onFailure(@NonNull Exception e) {
-//                                Log.i("informacion", "Error adding document", e);
-//                                waitingDialog.dismiss();
-//                            }
-//                        });
+                /*Guardar en base de Datos*/
+                final SpotsDialog waitingDialog = new SpotsDialog(SolicitarServicioActivity.this);
+                waitingDialog.show();
+
+                // Agregar nuevo documento a Base de Datos
+                db.collection("services")
+                        .add(services)
+                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                Log.i("Informacion", "Servicio agregado a base de datos" + documentReference.getId());
+                                waitingDialog.dismiss();
+
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.i("informacion", "Error adding document", e);
+                                waitingDialog.dismiss();
+                            }
+                        });
             }
         });
     }
@@ -463,17 +477,8 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
         Uri FilePathUri;
         FilePathUri = data.getData();
         Log.i("image uri: " , String.valueOf(FilePathUri));
-//        StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("All_Image_Uploads"  + settings.getString("UIDusuario","") +  + System.currentTimeMillis() + "." + GetFileExtension(FilePathUri));
-////        Uri file = Uri.fromFile(new File(String.valueOf(FilePathUri + "." + GetFileExtension(FilePathUri))));
-//
-//        UploadTask uploadTask = storageRef.putFile(FilePathUri);
-//        uploadTask.addOnProgressListener(new OnProgressListener() {
-//            @Override
-//            public void onProgress(Object o) {
-//
-//            }
-//        });
 
+        /*Location selected */
         if (requestCode == PLACE_PICKER_REQUEST){
             Log.i("Data place_picker: " , "place_picker");
             if (resultCode == RESULT_OK) {

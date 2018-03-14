@@ -9,15 +9,17 @@ public class Servicios_worker {
     private String servicio;
     private String descripcion;
     private String direccion;
+    private String Min;
 
     public Servicios_worker() {
     }
 
-    public Servicios_worker(String id, String servicio, String descripcion, String direccion) {
+    public Servicios_worker(String id, String servicio, String descripcion, String direccion, String min) {
         this.id = id;
         this.servicio = servicio;
         this.descripcion = descripcion;
         this.direccion = direccion;
+        Min = min;
     }
 
     public String getId() {
@@ -50,5 +52,13 @@ public class Servicios_worker {
 
     public void setDireccion(String direccion) {
         this.direccion = direccion;
+    }
+
+    public String getMin() {
+        return Min;
+    }
+
+    public void setMin(String min) {
+        Min = min;
     }
 }

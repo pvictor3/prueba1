@@ -111,8 +111,8 @@ public class MainActivity extends AppCompatActivity
 
     public void redirectAccount(){
         Log.i("Click", "Image");
-        Intent intent = new Intent(MainActivity.this, ProfileFragment.class);
-        startActivity(intent);
+//        Intent intent = new Intent(MainActivity.this, ProfileFragment.class);
+//        startActivity(intent);
     }
 
     @Override

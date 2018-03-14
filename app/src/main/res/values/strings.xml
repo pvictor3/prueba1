@@ -34,6 +34,10 @@
         <item>Carpintero</item>
         <item>Mecánico</item>
     </string-array>
+    <string-array name="auto_complete">
+        <item>Plomero</item>
+        <item>Albañil</item>
+    </string-array>
 
     <!-- FORMULARIOS -->
     <string name="name">Nombre con apellidos</string>
