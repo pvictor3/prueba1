@@ -25,4 +25,13 @@
 
     <style name="MatTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="CardViewHeader">
+        <item name="android:textSize">17sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="CardViewDescription">
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+    </style>
+
 </resources>

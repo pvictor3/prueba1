@@ -18,6 +18,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/textColorPrimary"
             app:popupTheme="@style/MatTheme.PopupOverlay"/>
+
         <me.zhanghai.android.materialprogressbar.MaterialProgressBar
             android:id="@+id/progress_bar"
             android:layout_width="match_parent"

@@ -27,6 +27,7 @@ import com.example.adm.appservicios.Fragments.IndexFragment;
 import com.example.adm.appservicios.Fragments.MenuServicesFragment;
 import com.example.adm.appservicios.Fragments.PagosFragment;
 import com.example.adm.appservicios.Fragments.ProfileFragment;
+import com.example.adm.appservicios.Fragments.RegisterOficioFragment;
 import com.example.adm.appservicios.Fragments.ServicesFragment;
 import com.example.adm.appservicios.Fragments.UbicacionesFragment;
 import com.example.adm.appservicios.R;
@@ -160,23 +161,27 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            // Handle the camera action
+            // Index
             fragmentclass = IndexFragment.class;
 
         } else if (id == R.id.nav_services) {
-            // Handle the camera action
+            // Servicios
             fragmentclass = MenuServicesFragment.class;
 
         } else if (id == R.id.nav_pagos) {
+            // Pagos
             fragmentclass = PagosFragment.class;
 
         } else if (id == R.id.nav_ubicacion) {
+            //Ubicaciones
             fragmentclass = UbicacionesFragment.class;
 
         } else if (id == R.id.nav_builder) {
-            fragmentclass = ServicesFragment.class;
+
+            fragmentclass = RegisterOficioFragment.class;
 
         } else if (id == R.id.nav_info) {
+            // Acerca de
             fragmentclass = ServicesFragment.class;
 
         }

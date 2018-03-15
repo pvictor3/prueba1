@@ -39,6 +39,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.adm.appservicios.Database.SQLiteHandler;
 import com.example.adm.appservicios.Helpers.Address;
@@ -100,6 +101,7 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
 
     String descripcionString, tituloString;
 
+    /*Permisos para localizacion*/
     final static int MY_PERMISSION_FINE_LOCATION = 101;
     final static int PLACE_PICKER_REQUEST = 1;
     GoogleApiClient mClient;
@@ -376,13 +378,16 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
                 editText_min 				= (EditText) findViewById(R.id.editText_Min);
                 editText_max 				= (EditText) findViewById(R.id.editText_Max);
 
-                Log.i("Servicio ", txtView_Servicio.getText().toString());
-                Log.i("Descripcion ", editText_descripcion.getText().toString());
-                Log.i("Direccion ", txtView_Address.getText().toString());
-                Log.i("lat ", String.valueOf(latpos));
-                Log.i("lng ", String.valueOf(lngpos));
-                Log.i("Min ", editText_min.getText().toString());
-                Log.i("Max ", editText_max.getText().toString());
+//                Log.i("Servicio ", txtView_Servicio.getText().toString());
+//                Log.i("Descripcion ", editText_descripcion.getText().toString());
+//                Log.i("Direccion ", txtView_Address.getText().toString());
+//                Log.i("lat ", String.valueOf(latpos));
+//                Log.i("lng ", String.valueOf(lngpos));
+//                Log.i("Min ", editText_min.getText().toString());
+//                Log.i("Max ", editText_max.getText().toString());
+
+                String x = getImages();
+                Log.i("image ", x);
 
                 Log.i("Nuevo servicio", "creando...");
                 Map<String, Object> services = new HashMap<>();
@@ -394,20 +399,12 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
                 services.put("Max", editText_max.getText().toString());
                 services.put("Lat", latpos);
                 services.put("Lng", lngpos);
+                services.put("Estatus", "Pendiente");
+                services.put("Fotos", x);
+                services.put("Telefono_atiende", "");
+                services.put("Telefono_usuario", settings.getString("Telefonousuario", ""));
 
-                String x = getImages();
-                Log.i("image ", x);
-
-                DatabaseReference mDatabase;
-// ...
-                /*Save database realtime database*/
-//                mDatabase = FirebaseDatabase.getInstance().getReference();
-//
-//                Address user = new Address(settings.getString("UIDusuario",""), txtView_Servicio.getText().toString(), editText_descripcion.getText().toString(), String.valueOf(latpos), String.valueOf(lngpos));
-
-//                mDatabase.child("address").setValue(user);
-
-                /*Guardar en base de Datos*/
+                /*Inicializar progressbar*/
                 final SpotsDialog waitingDialog = new SpotsDialog(SolicitarServicioActivity.this);
                 waitingDialog.show();
 
@@ -418,7 +415,21 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
                                 Log.i("Informacion", "Servicio agregado a base de datos" + documentReference.getId());
+
+                                /*Reinicio de variables de textos*/
+                                txtView_Servicio.setText("");
+                                editText_descripcion.setText("");
+                                txtView_Address.setText("");
+                                editText_min.setText("");
+                                editText_max.setText("");
+                                latpos = Double.parseDouble("");
+                                lngpos = Double.parseDouble("");
+
+                                /*Ocultar progressbar*/
                                 waitingDialog.dismiss();
+
+                                /*Mostrar mensaje de exito*/
+                                Toast.makeText (mContext, "Servicio solicitado con exito.", Toast.LENGTH_SHORT).show ();
 
                             }
                         })
@@ -427,6 +438,9 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
                             public void onFailure(@NonNull Exception e) {
                                 Log.i("informacion", "Error adding document", e);
                                 waitingDialog.dismiss();
+
+                                /*Mostrar mensaje de error*/
+                                Toast.makeText (mContext, "Hubo un error al solicitar servicio, intente de nuevo.", Toast.LENGTH_SHORT).show ();
                             }
                         });
             }
@@ -478,24 +492,27 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
         FilePathUri = data.getData();
         Log.i("image uri: " , String.valueOf(FilePathUri));
 
-        /*Location selected */
+        /*Localizacion seleccionada */
         if (requestCode == PLACE_PICKER_REQUEST){
-            Log.i("Data place_picker: " , "place_picker");
+//            Log.i("Data place_picker: " , "place_picker");
             if (resultCode == RESULT_OK) {
-                Log.i("Data RESULT_OK: " , "RESULT_OK");
+//                Log.i("Data RESULT_OK: " , "RESULT_OK");
                 Place place = PlacePicker.getPlace(SolicitarServicioActivity.this, data);
+                /*Asignacion de direccion y latlng de ubicacion a variables de texto*/
                 String address = String.format("Place %s",place.getAddress());
                 String latitude = String.valueOf(place.getLatLng().latitude);
                 String longitude = String.valueOf(place.getLatLng().longitude);
-                Log.i("address " , address);
-                Log.i("latitud " , latitude);
-                Log.i("longitud " , longitude);
+//                Log.i("address " , address);
+//                Log.i("latitud " , latitude);
+//                Log.i("longitud " , longitude);
 
+                /*Parsear string to double para variables*/
                 latpos = Double.parseDouble(latitude);
                 lngpos = Double.parseDouble(longitude);
 
                 editText_address.setText(address);
 
+                /*Mostrar expandable para mostrar direccion seleccionada para guardar*/
                 expandableLayout0.expand();
 
             }
@@ -522,6 +539,7 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
 
     }
 
+    /*Listado de profesiones para seleccionar*/
     public void createDialogEmployee(){
         AlertDialog.Builder builderSingle = new AlertDialog.Builder(this);
         builderSingle.setIcon(R.drawable.ic_work_black);
@@ -548,7 +566,7 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
         builderSingle.show();
     }
 
-    /*Al Seleccionar oficio se asigna a textview*/
+    /*Al Seleccionar profesion se asigna a textview*/
     public void onSelecOficio(String string_oficio){
         txtView_Servicio.setText(string_oficio);
     }

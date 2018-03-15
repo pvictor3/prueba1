@@ -33,7 +33,7 @@ public class Adapter_services_required extends RecyclerView.Adapter<Adapter_serv
 
         private ServicesRequiredViewHolder(final View itemView) {
             super(itemView);
-            context = itemView.getContext();
+            context         = itemView.getContext();
             id              = (TextView) itemView.findViewById(R.id.txtView_card_service_id);
             tag_servicio    = (TextView) itemView.findViewById(R.id.txtView_card_tag_serviceAsked);
             money           = (TextView) itemView.findViewById(R.id.txtView_card_service_money);
@@ -43,6 +43,7 @@ public class Adapter_services_required extends RecyclerView.Adapter<Adapter_serv
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Log.i("Informacion click", "Click en servicio");
 //                    final int position = getAdapterPosition();
 //                    CharSequence profesion = id.getText();
 //                    Intent intent = new Intent(itemView.getContext(), Activity_service.class);

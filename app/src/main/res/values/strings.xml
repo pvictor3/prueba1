@@ -7,7 +7,7 @@
     <string name="action_settings">Settings</string>
 
     <!-- Menu -->
-    <string name="builder">Persona de oficio</string>
+    <string name="builder">Registrarse como persona de oficio</string>
     <string name="info">Acerca de&#8230;</string>
 
     <!-- Side_Bar -->
@@ -17,8 +17,23 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_maps">Map</string>
 
+    <string name="registro">Registro</string>
 
     <string name="send">Enviar</string>
+
+    <!-- ENCABEZADOS 1-->
+
+    <string name="search">¿Qué quiero?</string>
+
+    <!-- ENCABEZADOS 2-->
+    <string name="tus_datos">Tus Datos</string>
+    <string name="tu_trabajo">Tu trabajo</string>
+
+
+    <!-- ENCABEZADOS 3-->
+    <style name="ToolBarWithNavigationBack">
+        <item name="navigationIcon">@drawable/abc_ic_ab_back_material</item>
+    </style>
 
     <!--Pregunta -->
     <string name="pregunta">¿Qué oficio quieres desempeñar?</string>

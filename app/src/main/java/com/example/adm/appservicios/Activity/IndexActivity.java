@@ -20,10 +20,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.adm.appservicios.Database.SQLiteHandler;
+import com.example.adm.appservicios.Helpers.User;
 import com.example.adm.appservicios.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
@@ -208,6 +210,9 @@ public class IndexActivity extends AppCompatActivity {
         dialog.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                edtName.setText("");
+                edtPhone.setText("");
+                edtPassword.setText("");
                 dialog.dismiss();
             }
         });
@@ -279,11 +284,13 @@ public class IndexActivity extends AppCompatActivity {
                                 if (value.size() > 0) {
                                     /*Recorrido de datos*/
                                     for (DocumentSnapshot doc : value) {
-                                        /*Log.i("id", doc.getId());
+                                        //Obtener id de usuario registrado -> doc.getId()
+                                        /*
                                         Log.i("Nombre", doc.getString("Nombre"));
                                         Log.i("Telefono", doc.getString("Telefono"));
                                         Log.i("Contrasena", doc.getString("Contrasena"));*/
 
+                                        /*Validar si existe dato*/
                                         /*if (doc.get("Nombre") != null) {
 
                                         }*/
@@ -296,12 +303,12 @@ public class IndexActivity extends AppCompatActivity {
 
                                         if (fila.moveToFirst())
                                         {
-                                            Log.i("Data", fila.getString(0));
-                                            Log.i("Nombre", fila.getString(1));
-                                            Log.i("Telefono", fila.getString(2));
-                                            Log.i("UID", fila.getString(3));
-                                            Log.i("Tipo_user", fila.getString(5));
-                                            Log.i("Logueado", fila.getString(7));
+//                                            Log.i("Data", fila.getString(0));
+//                                            Log.i("Nombre", fila.getString(1));
+//                                            Log.i("Telefono", fila.getString(2));
+//                                            Log.i("UID", fila.getString(3));
+//                                            Log.i("Tipo_user", fila.getString(5));
+//                                            Log.i("Logueado", fila.getString(7));
 
                                             /*Declaracion de session */
                                             SharedPreferences settings = getSharedPreferences("sesion_user", MODE_PRIVATE);

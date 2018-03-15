@@ -11,8 +11,7 @@ public class User {
     public User() {
     }
 
-    public User(String uid, String nombre, String telefono, String contrasena, String tipo) {
-        this.uid = uid;
+    public User(String nombre, String telefono, String contrasena, String tipo) {
         this.Nombre = nombre;
         this.Telefono = telefono;
         this.Contrasena = contrasena;
