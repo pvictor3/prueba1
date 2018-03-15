@@ -83,7 +83,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import dmax.dialog.SpotsDialog;
 
@@ -107,7 +109,11 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
     GoogleApiClient mClient;
     Context mContext;
 
-    private Uri filePath;
+    /*variable url para imagen*/
+    Uri FilePathUri;
+
+    /*Arraylsit image*/
+    List<String> list;
 
     //LinearLayout
     LinearLayout linearLayour_horizontal;
@@ -116,6 +122,8 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
 
     /*Firebase*/
     FirebaseFirestore db;
+    StorageReference storageReference;
+    FirebaseStorage storage;
 
     /*Declaracion inicial para default session user*/
     SharedPreferences settings;
@@ -127,6 +135,9 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
 
         // Inicializacion de Firebase database
         initFirebase();
+
+        /*Inicializacion de arraylist image*/
+        list = new ArrayList<String>();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -272,11 +283,12 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
             @Override
             public void onClick(View view) {
 //                ImagePicker.pickImage(SolicitarServicioActivity.this, "Sube una foto:");
+
                 final int PICK_IMAGE_REQUEST = 71;
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+                startActivityForResult(Intent.createChooser(intent, "Sube una foto"), PICK_IMAGE_REQUEST);
             }
         });
 
@@ -400,7 +412,7 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
                 services.put("Lat", latpos);
                 services.put("Lng", lngpos);
                 services.put("Estatus", "Pendiente");
-                services.put("Fotos", x);
+                services.put("Fotos", list.size());
                 services.put("Telefono_atiende", "");
                 services.put("Telefono_usuario", settings.getString("Telefonousuario", ""));
 
@@ -422,14 +434,17 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
                                 txtView_Address.setText("");
                                 editText_min.setText("");
                                 editText_max.setText("");
-                                latpos = Double.parseDouble("");
-                                lngpos = Double.parseDouble("");
+//                                latpos = Double.parseDouble("");
+//                                lngpos = Double.parseDouble("");
+
+                                /*Reset de arraylist image*/
+                                list = new ArrayList<String>();
 
                                 /*Ocultar progressbar*/
                                 waitingDialog.dismiss();
 
                                 /*Mostrar mensaje de exito*/
-                                Toast.makeText (mContext, "Servicio solicitado con exito.", Toast.LENGTH_SHORT).show ();
+                                Toast.makeText (SolicitarServicioActivity.this, "Servicio solicitado con exito.", Toast.LENGTH_SHORT).show ();
 
                             }
                         })
@@ -440,7 +455,7 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
                                 waitingDialog.dismiss();
 
                                 /*Mostrar mensaje de error*/
-                                Toast.makeText (mContext, "Hubo un error al solicitar servicio, intente de nuevo.", Toast.LENGTH_SHORT).show ();
+                                Toast.makeText (SolicitarServicioActivity.this, "Hubo un error al solicitar servicio, intente de nuevo.", Toast.LENGTH_SHORT).show ();
                             }
                         });
             }
@@ -488,9 +503,10 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
 
         super.onActivityResult(requestCode, resultCode, data);
 
-        Uri FilePathUri;
+        /*Se obtiene direccion para carga de imagen*/
         FilePathUri = data.getData();
         Log.i("image uri: " , String.valueOf(FilePathUri));
+        list.add(String.valueOf(FilePathUri));
 
         /*Localizacion seleccionada */
         if (requestCode == PLACE_PICKER_REQUEST){
@@ -535,7 +551,9 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
     private void initFirebase() {
         FirebaseApp.initializeApp(this);
 
-        db = FirebaseFirestore.getInstance();
+        db                  = FirebaseFirestore.getInstance();
+        storage             = FirebaseStorage.getInstance();
+        storageReference    = storage.getReference();
 
     }
 
@@ -582,24 +600,58 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
 
     /*Obtener imagenes de array*/
     public String getImages()  {
-        int count = linearLayour_horizontal.getChildCount();
-        JSONArray imagenes = new JSONArray();
-        JSONObject jsonObject = new JSONObject();
-        for(int i=0; i<count-1; i++) {
-            ImageView imageView = (ImageView) linearLayour_horizontal.getChildAt(i);
-            Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
-            String image = imageToString(bitmap);
-            imagenes.put(image);
-        }
 
-        try {
-            jsonObject.put("fotos", imagenes);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        for (String area : list)
+        {
+            Log.i("Recorrdio arraylist", area);
 
-        String photos_for_send = jsonObject.toString();
-        return photos_for_send;
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Uploading...");
+            progressDialog.show();
+
+            StorageReference ref = storageReference.child("All_Image_Uploads/"+ UUID.randomUUID().toString());
+            ref.putFile(Uri.parse(area))
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            progressDialog.dismiss();
+                            Toast.makeText(SolicitarServicioActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
+                            Toast.makeText(SolicitarServicioActivity.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
+                                    .getTotalByteCount());
+                            progressDialog.setMessage("Uploaded "+(int)progress+"%");
+                        }
+                    });
+        }
+//        int count = linearLayour_horizontal.getChildCount();
+//        JSONArray imagenes = new JSONArray();
+//        JSONObject jsonObject = new JSONObject();
+//        for(int i=0; i<count-1; i++) {
+//            ImageView imageView = (ImageView) linearLayour_horizontal.getChildAt(i);
+//            Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
+//            String image = imageToString(bitmap);
+//            imagenes.put(image);
+//        }
+//
+//        try {
+//            jsonObject.put("fotos", imagenes);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//
+//        String photos_for_send = jsonObject.toString();
+        return "true";
     }
     /*Obtener imagenes de array*/
 
