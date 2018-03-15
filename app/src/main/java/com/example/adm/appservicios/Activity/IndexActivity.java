@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.adm.appservicios.Database.SQLiteHandler;
 import com.example.adm.appservicios.Helpers.User;
@@ -39,6 +40,7 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import dmax.dialog.SpotsDialog;
 
@@ -179,28 +181,63 @@ public class IndexActivity extends AppCompatActivity {
                 final SpotsDialog waitingDialog = new SpotsDialog(IndexActivity.this);
                 waitingDialog.show();
 
-                Log.i("Nuevo usuario", "creando...");
-                Map<String, Object> user = new HashMap<>();
-                user.put("Nombre", edtName.getText().toString());
-                user.put("Telefono", edtPhone.getText().toString());
-                user.put("Contrasena", edtPassword.getText().toString());
-                user.put("Tipo_user", "Usuario");
+//                DatabaseReference mDatabase;
+////// ...
+//                mDatabase = FirebaseDatabase.getInstance().getReference();
+//
+//                User user = new User(edtName.getText().toString(), edtPhone.getText().toString(), edtPassword.getText().toString(), "Usuario");
+//
+//                mDatabase.child("users/"+ UUID.randomUUID().toString()).setValue(user);
 
-                // Add a new document with a generated ID
+                /*Validar si existe usuario*/
                 db.collection("users")
-                        .add(user)
-                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        .whereEqualTo("Telefono", edtPhone.getText().toString())
+                        .whereEqualTo("Contrasena", edtPassword.getText().toString())
+                        .addSnapshotListener(new EventListener<QuerySnapshot>() {
                             @Override
-                            public void onSuccess(DocumentReference documentReference) {
-                                Log.i("Informacion", "Documento anadido a base de datos" + documentReference.getId());
-                                waitingDialog.dismiss();
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.i("informacion", "Error adding document", e);
-                                waitingDialog.dismiss();
+                            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
+                                //Log.i("sucess", String.valueOf(value.size()));
+
+                                /*Validar si hay registro*/
+                                if (value.size() > 0) {
+                                    waitingDialog.dismiss();
+                                    /*Mostrar mensaje de exito*/
+                                    Toast.makeText (IndexActivity.this, "Ya existe un usuario registrado, intente con otro.", Toast.LENGTH_SHORT).show ();
+
+                                } else {
+                                    Log.i("Error", "No existe usuario registrado");
+
+                                    Log.i("Nuevo usuario", "creando...");
+                                    Map<String, Object> user = new HashMap<>();
+                                    user.put("Nombre", edtName.getText().toString());
+                                    user.put("Telefono", edtPhone.getText().toString());
+                                    user.put("Contrasena", edtPassword.getText().toString());
+                                    user.put("Tipo_user", "Usuario");
+
+                                    /*Registro de nuevo usuario*/
+                                    db.collection("users")
+                                            .add(user)
+                                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                @Override
+                                                public void onSuccess(DocumentReference documentReference) {
+                                                    Log.i("Informacion", "Documento anadido a base de datos" + documentReference.getId());
+                                                    waitingDialog.dismiss();
+
+                                                    /*Mostrar mensaje de exito*/
+                                                    Toast.makeText (IndexActivity.this, "Usuario creado con éxito.", Toast.LENGTH_SHORT).show ();
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Log.i("informacion", "Error adding document", e);
+                                                    waitingDialog.dismiss();
+                                                    /*Mostrar mensaje de error*/
+                                                    Toast.makeText (IndexActivity.this, "No se pudo crear el usuario, intente de nuevo.", Toast.LENGTH_SHORT).show ();
+                                                }
+                                            });
+                                }
+
                             }
                         });
 

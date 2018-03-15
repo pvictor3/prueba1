@@ -19,6 +19,7 @@ import android.os.Build;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
@@ -28,6 +29,7 @@ import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -44,6 +46,7 @@ import android.widget.Toast;
 import com.example.adm.appservicios.Database.SQLiteHandler;
 import com.example.adm.appservicios.Helpers.Address;
 import com.example.adm.appservicios.Helpers.CheatSheet;
+import com.example.adm.appservicios.Helpers.UploadInfoImage;
 import com.example.adm.appservicios.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -101,7 +104,7 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
     Double latpos, lngpos;
     private Bitmap bitmap;
 
-    String descripcionString, tituloString;
+    String descripcionString, tituloString, UIDservice;
 
     /*Permisos para localizacion*/
     final static int MY_PERMISSION_FINE_LOCATION = 101;
@@ -398,8 +401,53 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
 //                Log.i("Min ", editText_min.getText().toString());
 //                Log.i("Max ", editText_max.getText().toString());
 
-                String x = getImages();
-                Log.i("image ", x);
+                if (TextUtils.isEmpty(editText_descripcion.getText().toString()))
+                {
+                    Snackbar.make(view, "Por favor ingresa descripcion", Snackbar.LENGTH_SHORT)
+                            .show();
+
+                    return;
+                }
+
+                if (TextUtils.isEmpty(txtView_Address.getText().toString()))
+                {
+                    Snackbar.make(view, "Por favor selecciona una direccion", Snackbar.LENGTH_SHORT)
+                            .show();
+
+                    return;
+                }
+
+                if (TextUtils.isEmpty(txtView_Servicio.getText().toString()))
+                {
+                    Snackbar.make(view, "Por favor selecciona tipo de servicio", Snackbar.LENGTH_SHORT)
+                            .show();
+
+                    return;
+                }
+
+                if (TextUtils.isEmpty(editText_min.getText().toString()))
+                {
+                    Snackbar.make(view, "Por favor ingresa minimo a pagar", Snackbar.LENGTH_SHORT)
+                            .show();
+
+                    return;
+                }
+
+                if (TextUtils.isEmpty(editText_max.getText().toString()))
+                {
+                    Snackbar.make(view, "Por favor ingresa máximo a pagar", Snackbar.LENGTH_SHORT)
+                            .show();
+
+                    return;
+                }
+
+                if (list.size() < 1)
+                {
+                    Snackbar.make(view, "Por favor selecciona foto del problema", Snackbar.LENGTH_SHORT)
+                            .show();
+
+                    return;
+                }
 
                 Log.i("Nuevo servicio", "creando...");
                 Map<String, Object> services = new HashMap<>();
@@ -427,6 +475,11 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
                                 Log.i("Informacion", "Servicio agregado a base de datos" + documentReference.getId());
+
+                                UIDservice = documentReference.getId();
+
+                                String x = getImages();
+                                Log.i("image ", x);
 
                                 /*Reinicio de variables de textos*/
                                 txtView_Servicio.setText("");
@@ -616,6 +669,15 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             progressDialog.dismiss();
                             Toast.makeText(SolicitarServicioActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
+
+                            String name = taskSnapshot.getMetadata().getName();
+                            String url = taskSnapshot.getDownloadUrl().toString();
+
+                            Log.i("Uri upload image", "Uri: " + url);
+                            Log.i("Name upload image", "Name: " + name);
+
+                            UploadInfoImage info = new UploadInfoImage(name, url, UIDservice, settings.getString("UIDusuario",""));
+                            db.collection("images").add(info);
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -634,23 +696,7 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
                         }
                     });
         }
-//        int count = linearLayour_horizontal.getChildCount();
-//        JSONArray imagenes = new JSONArray();
-//        JSONObject jsonObject = new JSONObject();
-//        for(int i=0; i<count-1; i++) {
-//            ImageView imageView = (ImageView) linearLayour_horizontal.getChildAt(i);
-//            Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
-//            String image = imageToString(bitmap);
-//            imagenes.put(image);
-//        }
-//
-//        try {
-//            jsonObject.put("fotos", imagenes);
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//
-//        String photos_for_send = jsonObject.toString();
+
         return "true";
     }
     /*Obtener imagenes de array*/
