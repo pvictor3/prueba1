@@ -493,6 +493,8 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
                                 /*Reset de arraylist image*/
                                 list = new ArrayList<String>();
 
+                                UIDservice = "";
+
                                 /*Ocultar progressbar*/
                                 waitingDialog.dismiss();
 
@@ -557,9 +559,11 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
         super.onActivityResult(requestCode, resultCode, data);
 
         /*Se obtiene direccion para carga de imagen*/
-        FilePathUri = data.getData();
-        Log.i("image uri: " , String.valueOf(FilePathUri));
-        list.add(String.valueOf(FilePathUri));
+        if (data != null){
+            FilePathUri = data.getData();
+            Log.i("image uri: " , String.valueOf(FilePathUri));
+            list.add(String.valueOf(FilePathUri));
+        }
 
         /*Localizacion seleccionada */
         if (requestCode == PLACE_PICKER_REQUEST){

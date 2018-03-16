@@ -36,8 +36,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     Fragment fragment = null;
     Class fragmentclass = null;
@@ -200,19 +199,19 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        Log.i("Info->", "OnMapReady");
-        mMap = googleMap;
-        mMap.getUiSettings().setMapToolbarEnabled(false);
-        mMap.getUiSettings().setZoomControlsEnabled(false);
-        setCurretPosition();
-    }
+//    @Override
+//    public void onMapReady(GoogleMap googleMap) {
+//        Log.i("Info->", "OnMapReady");
+//        mMap = googleMap;
+//        mMap.getUiSettings().setMapToolbarEnabled(false);
+//        mMap.getUiSettings().setZoomControlsEnabled(false);
+//        setCurretPosition();
+//    }
 
-    public void setCurretPosition(){
-        LatLng marker = new LatLng(19.33978502, -99.19086277 );
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker, 15));
-    }
+//    public void setCurretPosition(){
+//        LatLng marker = new LatLng(19.33978502, -99.19086277 );
+//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker, 15));
+//    }
 
     private void logoutUser() {
         /*Declaracion de session */

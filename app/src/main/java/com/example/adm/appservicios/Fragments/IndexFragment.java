@@ -1,6 +1,9 @@
 package com.example.adm.appservicios.Fragments;
 
+import android.location.Location;
+import android.location.LocationListener;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -14,7 +17,10 @@ import android.widget.Toast;
 
 import com.example.adm.appservicios.R;
 import com.example.adm.appservicios.getters_and_setters.Servicios_worker;
+import com.firebase.geofire.GeoFire;
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -35,8 +41,21 @@ import com.google.firebase.firestore.QuerySnapshot;
 public class IndexFragment extends Fragment implements OnMapReadyCallback {
 
     MapView mapView;
-    GoogleMap map;
+    GoogleMap mMap;
     AutoCompleteTextView search_EditText;
+
+    private static final int MY_PERMISSSION_REQUEST_CODE = 7000;
+    private static final int PLAY_SERVICE_RES_REQUEST = 7001;
+
+    private LocationListener mLocationRequest;
+    private GoogleApiClient mGoogleApiCliente;
+    private Location mLastLocation;
+
+    private static int UPDATE_INTVERVAL = 5000;
+    private static  int FATEST_INTERVAL = 3000;
+    private static int DISPLACEMENT = 10;
+
+    GeoFire geoFire;
 
     /*Firebase*/
     FirebaseFirestore db;
@@ -106,10 +125,10 @@ public class IndexFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Log.i("Vista creada", " onMapReady");
-        map = googleMap;
-        map.getUiSettings().setMapToolbarEnabled(false);
-        map.getUiSettings().setZoomControlsEnabled(false);
-        map.getUiSettings().setMyLocationButtonEnabled(false);
+        mMap = googleMap;
+        mMap.getUiSettings().setMapToolbarEnabled(false);
+        mMap.getUiSettings().setZoomControlsEnabled(false);
+        mMap.getUiSettings().setMyLocationButtonEnabled(false);
         setCurretPosition();
     }
 
@@ -117,7 +136,7 @@ public class IndexFragment extends Fragment implements OnMapReadyCallback {
         Log.i("Vista creada", " setCurretPosition");
         // Updates the location and zoom of the MapView
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(19.33978502, -99.19086277 ), 10);
-        map.animateCamera(cameraUpdate);
+        mMap.animateCamera(cameraUpdate);
     }
 
     /*Inicializacion de Firebase*/
@@ -153,7 +172,7 @@ public class IndexFragment extends Fragment implements OnMapReadyCallback {
                         } else {
                             /*No existen servicios registrados por usuario*/
                             Log.i("Error", "No existe usuario para la busqueda dada.");
-                            map.clear();
+                            mMap.clear();
                             Toast.makeText(getActivity(), "No existen datos para la busqueda dada.",
                                     Toast.LENGTH_LONG).show();
 
@@ -167,9 +186,9 @@ public class IndexFragment extends Fragment implements OnMapReadyCallback {
 
     public void placeMarker (LatLng point, int pos, String Nombre) {
         Log.i("Vista creada", " placeMarker");
-        if (map != null) {
+        if (mMap != null) {
             if (pos == 0){
-                map.clear();
+                mMap.clear();
             }
 
             // Setting latitude and longitude for the marker
@@ -178,7 +197,7 @@ public class IndexFragment extends Fragment implements OnMapReadyCallback {
             markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin));
 
             // Adding marker on the Google Map
-            map.addMarker(markerOptions);
+            mMap.addMarker(markerOptions);
         }
     }
 }

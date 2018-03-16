@@ -13,10 +13,10 @@
         android:orientation="vertical">
 
         <!-- Header -->
+        <!--android:layout_weight="1"-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="center|top"
             android:orientation="vertical">
 
@@ -133,6 +133,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="26dp"
                         android:layout_marginTop="4dp"
+                        android:layout_marginBottom="50dp"
                         card_view:layout_constraintLeft_toLeftOf="parent"
                         card_view:layout_constraintTop_toBottomOf="@+id/card_item_textView_tittle"></TextView>
 
@@ -143,10 +144,53 @@
 
         <!-- Footer -->
         <LinearLayout
+            android:id="@+id/linear1"
             android:layout_width="match_parent"
             android:layout_height="70dp"
+            android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
+
+            <Button
+                android:id="@+id/identificacion_ofi"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:text="Identificacion"
+                android:textColor="@color/white" />
+            <Button
+                android:id="@+id/photo_titulo"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:text="Titulo o Certificado"
+                android:textColor="@color/white" />
+            <Button
+                android:id="@+id/photo_perfil"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:text="Foto perfil"
+                android:textColor="@color/white" />
+            <Button
+                android:id="@+id/photo"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:text="Foto"
+                android:textColor="@color/white" />
 
             <Button
                 android:id="@+id/btn_send_docs"
