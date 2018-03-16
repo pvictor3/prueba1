@@ -6,16 +6,17 @@ package com.example.adm.appservicios.Helpers;
 
 public class UploadInfoImage {
 
-    public String name, url, idservice, idusuario;
+    public String name, url, idservice, idusuario, idcita;
 
     public UploadInfoImage() {
     }
 
-    public UploadInfoImage(String name, String url, String idservice, String idusuario) {
+    public UploadInfoImage(String name, String url, String idservice, String idusuario, String idcita) {
         this.name = name;
         this.url = url;
         this.idservice = idservice;
         this.idusuario = idusuario;
+        this.idcita = idcita;
     }
 
     public String getName() {
@@ -48,5 +49,13 @@ public class UploadInfoImage {
 
     public void setIdusuario(String idusuario) {
         this.idusuario = idusuario;
+    }
+
+    public String getIdcita() {
+        return idcita;
+    }
+
+    public void setIdcita(String idcita) {
+        this.idcita = idcita;
     }
 }

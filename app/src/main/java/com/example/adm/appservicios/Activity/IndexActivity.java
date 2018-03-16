@@ -213,6 +213,9 @@ public class IndexActivity extends AppCompatActivity {
                                     user.put("Telefono", edtPhone.getText().toString());
                                     user.put("Contrasena", edtPassword.getText().toString());
                                     user.put("Tipo_user", "Usuario");
+                                    user.put("Image_user", "");
+                                    user.put("Lat", "");
+                                    user.put("Lng", "");
 
                                     /*Registro de nuevo usuario*/
                                     db.collection("users")

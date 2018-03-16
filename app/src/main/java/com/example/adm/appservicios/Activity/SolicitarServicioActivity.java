@@ -676,7 +676,7 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
                             Log.i("Uri upload image", "Uri: " + url);
                             Log.i("Name upload image", "Name: " + name);
 
-                            UploadInfoImage info = new UploadInfoImage(name, url, UIDservice, settings.getString("UIDusuario",""));
+                            UploadInfoImage info = new UploadInfoImage(name, url, UIDservice, settings.getString("UIDusuario",""), "");
                             db.collection("images").add(info);
                         }
                     })

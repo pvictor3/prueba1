@@ -23,6 +23,9 @@ public class RegisterOficioFragment extends Fragment {
     private static final int PERCENTAGE_TO_ANIMATE_AVATAR = 20;
     private boolean mIsAvatarShown = true;
 
+    private ViewPager viewPager;
+    private TabLayout tabLayout;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -35,10 +38,11 @@ public class RegisterOficioFragment extends Fragment {
         // Setup any handles to view objects here
         Log.i("Vista", "creada register oficio");
 
-        TabLayout tabLayout     = (TabLayout) getView().findViewById(R.id.materialup_tabs);
-        ViewPager viewPager     = (ViewPager) getView().findViewById(R.id.materialup_viewpager);
-        mProfileImage           = (ImageView) getView().findViewById(R.id.materialup_profile_image);
+        viewPager = (ViewPager) getView().findViewById(R.id.viewpager);
         setupViewPager(viewPager);
+
+        tabLayout = (TabLayout) getView().findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -47,27 +51,5 @@ public class RegisterOficioFragment extends Fragment {
         adapter.addFragment(new Citas(), "Etapa 2");
         adapter.addFragment(new Activacion(), "Etapa 3");
         viewPager.setAdapter(adapter);
-    }
-
-    //** Metodo de la animacion **//
-    public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
-        if (mMaxScrollSize == 0)
-            mMaxScrollSize = appBarLayout.getTotalScrollRange();
-
-        int percentage = (Math.abs(i)) * 100 / mMaxScrollSize;
-
-        if (percentage >= PERCENTAGE_TO_ANIMATE_AVATAR && mIsAvatarShown) {
-            mIsAvatarShown = false;
-            mProfileImage.animate()
-                    .scaleY(0).scaleX(0)
-                    .setDuration(200)
-                    .start();
-        }
-        if (percentage <= PERCENTAGE_TO_ANIMATE_AVATAR && !mIsAvatarShown) {
-            mIsAvatarShown = true;
-            mProfileImage.animate()
-                    .scaleY(1).scaleX(1)
-                    .start();
-        }
     }
 }
