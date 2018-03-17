@@ -41,11 +41,13 @@ dependencies {
     implementation 'me.zhanghai.android.materialprogressbar:library:1.4.1'
     implementation 'com.github.captain-miao:optroundcardview:1.0.0'
     implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.sothree.slidinguppanel:library:3.3.1'
 
     implementation 'com.rengwuxian.materialedittext:library:2.1.4'
     implementation 'com.firebase:geofire-android:2.1.2'
     implementation 'com.google.firebase:firebase-auth:11.8.0'
     implementation 'com.google.firebase:firebase-firestore:11.8.0'
+    implementation 'com.firebaseui:firebase-ui-storage:0.6.0'
     implementation 'com.github.d-max:spots-dialog:0.7@aar'
 
     testImplementation 'junit:junit:4.12'

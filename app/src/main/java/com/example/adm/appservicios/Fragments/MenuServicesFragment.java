@@ -1,6 +1,8 @@
 package com.example.adm.appservicios.Fragments;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
@@ -19,6 +21,9 @@ public class MenuServicesFragment extends Fragment {
 
     RelativeLayout card1, card2;
 
+    /*Declaracion inicial para default session user*/
+    SharedPreferences settings;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -26,8 +31,19 @@ public class MenuServicesFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_menu_services, container, false);
 
+        /*Declaracion de session */
+        settings = this.getActivity().getSharedPreferences("sesion_user", Context.MODE_PRIVATE);
+
         card1 = (RelativeLayout) v.findViewById(R.id.bar1);
         card2 = (RelativeLayout) v.findViewById(R.id.bar2);
+
+        if (settings.getString("Tipousuario","") != "Usuario")
+        {
+            card2.setVisibility(View.GONE);
+        }
+        else{
+            card2.setVisibility(View.VISIBLE);
+        }
 
         card1.setOnClickListener( new View.OnClickListener() {
             @Override

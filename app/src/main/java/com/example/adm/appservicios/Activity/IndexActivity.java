@@ -128,7 +128,7 @@ public class IndexActivity extends AppCompatActivity {
 
         /*Crear layout register*/
         LayoutInflater inflater = LayoutInflater.from(this);
-        View register_layout = inflater.inflate(R.layout.activity_register, null);
+        View register_layout    = inflater.inflate(R.layout.activity_register, null);
 
         final MaterialEditText edtName      = register_layout.findViewById(R.id.edtName);
         final MaterialEditText edtPassword  = register_layout.findViewById(R.id.edtPassword);

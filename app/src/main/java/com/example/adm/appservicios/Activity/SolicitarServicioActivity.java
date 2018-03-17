@@ -32,6 +32,7 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.webkit.MimeTypeMap;
@@ -44,6 +45,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.adm.appservicios.Database.SQLiteHandler;
+import com.example.adm.appservicios.Fragments.MenuServicesFragment;
 import com.example.adm.appservicios.Helpers.Address;
 import com.example.adm.appservicios.Helpers.CheatSheet;
 import com.example.adm.appservicios.Helpers.UploadInfoImage;
@@ -515,6 +517,23 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
                         });
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // todo: goto back activity from here
+
+                Intent intent = new Intent(SolicitarServicioActivity.this, MenuServicesFragment.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override

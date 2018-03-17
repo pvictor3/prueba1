@@ -239,7 +239,7 @@ public class Archivos extends Fragment {
             }
         });
 
-        //Asunto de las fotos
+        //Cargar Foto Identificacion
         btnIdOf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -255,6 +255,7 @@ public class Archivos extends Fragment {
             }
         });
 
+        //Cargar Foto Titulo
         btnTitulo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -270,6 +271,7 @@ public class Archivos extends Fragment {
             }
         });
 
+        //Cargar Foto Perfil
         btnPerfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -285,6 +287,7 @@ public class Archivos extends Fragment {
             }
         });
 
+        //Cargar Foto Photo
         btnPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -300,6 +303,7 @@ public class Archivos extends Fragment {
             }
         });
 
+        /*Click boton enviar*/
         btnEnviar.setOnClickListener( new View.OnClickListener() {
 
             @Override
@@ -342,6 +346,7 @@ public class Archivos extends Fragment {
                                 Log.i("Informacion", "Solicitud enviada" + documentReference.getId());
                                 IDService = documentReference.getId();
 
+                                /*Validacion de url diferente de vacio*/
                                 if (url1 != ""){
                                     String idimage = UUID.randomUUID().toString();
                                     list.add(String.valueOf(idimage));
@@ -369,25 +374,27 @@ public class Archivos extends Fragment {
                                     list2.add("photo");
                                     sendImage(url4, "photo", idimage);
                                 }
+                                /*Validacion de url diferente de vacio*/
 
+                                /*Actualizar cita documentos y keydocs*/
                                 DocumentReference contact = db.collection("citas").document(IDService);
                                 contact.update("Documentos_recibidos", list);
                                 contact.update("Key_docs", list2)
-                                        .addOnSuccessListener(new OnSuccessListener < Void > () {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                Toast.makeText(getActivity(), "Updated Successfully",
-                                                        Toast.LENGTH_SHORT).show();
-                                                /*Inicializacion de arraylist image*/
-                                                list = new ArrayList<String>();
-                                                list2 = new ArrayList<String>();
+                                    .addOnSuccessListener(new OnSuccessListener < Void > () {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Toast.makeText(getActivity(), "Updated Successfully",
+                                                    Toast.LENGTH_SHORT).show();
+                                            /*Inicializacion de arraylist image*/
+                                            list    = new ArrayList<String>();
+                                            list2   = new ArrayList<String>();
 
-                                                url1 = "";
-                                                url2 = "";
-                                                url3 = "";
-                                                url4 = "";
-                                            }
-                                        });
+                                            url1 = "";
+                                            url2 = "";
+                                            url3 = "";
+                                            url4 = "";
+                                        }
+                                    });
 
                                 waitingDialog.dismiss();
                                 Toast.makeText(getActivity(), "Solicitud enviada", Toast.LENGTH_SHORT).show();
@@ -425,6 +432,7 @@ public class Archivos extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        /*Asignacion de url de fotos a variables*/
         if (data != null){
             /*Se obtiene direccion para carga de imagen*/
             FilePathUri = data.getData();
@@ -457,9 +465,8 @@ public class Archivos extends Fragment {
 
     }
 
+    /*Function para subir foto a servidor*/
     private void sendImage(String url, final String nombre, final String idimage){
-
-
 
         StorageReference ref = storageReference.child("All_Image_Uploads/"+ idimage);
         ref.putFile(Uri.parse(url))
