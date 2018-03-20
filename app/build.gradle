@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
     defaultConfig {
         applicationId "com.example.adm.appservicios"
         minSdkVersion 16
@@ -16,19 +16,18 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    buildToolsVersion '27.0.3'
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support:design:26.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-
     implementation 'com.google.android.gms:play-services-location:11.8.0'
     implementation 'com.google.android.gms:play-services-maps:11.8.0'
     implementation 'com.google.android.gms:play-services-places:11.8.0'
     implementation 'com.google.android.gms:play-services:11.8.0'
-
     implementation 'com.google.firebase:firebase-core:11.8.0'
     implementation 'com.google.firebase:firebase-database:11.8.0'
     implementation 'com.github.Mariovc:ImagePicker:1.2.0'
@@ -42,14 +41,12 @@ dependencies {
     implementation 'com.github.captain-miao:optroundcardview:1.0.0'
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'com.sothree.slidinguppanel:library:3.3.1'
-
     implementation 'com.rengwuxian.materialedittext:library:2.1.4'
     implementation 'com.firebase:geofire-android:2.1.2'
     implementation 'com.google.firebase:firebase-auth:11.8.0'
     implementation 'com.google.firebase:firebase-firestore:11.8.0'
     implementation 'com.firebaseui:firebase-ui-storage:0.6.0'
     implementation 'com.github.d-max:spots-dialog:0.7@aar'
-
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'

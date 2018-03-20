@@ -454,6 +454,7 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
                 Log.i("Nuevo servicio", "creando...");
                 Map<String, Object> services = new HashMap<>();
                 services.put("idusuario", settings.getString("UIDusuario",""));
+                services.put("idatiende", "");
                 services.put("Descripcion", editText_descripcion.getText().toString());
                 services.put("Direccion", txtView_Address.getText().toString());
                 services.put("Servicio", txtView_Servicio.getText().toString());
@@ -483,25 +484,28 @@ public class SolicitarServicioActivity extends AppCompatActivity implements Goog
                                 String x = getImages();
                                 Log.i("image ", x);
 
-                                /*Reinicio de variables de textos*/
-                                txtView_Servicio.setText("");
-                                editText_descripcion.setText("");
-                                txtView_Address.setText("");
-                                editText_min.setText("");
-                                editText_max.setText("");
+                                if (x == "true")
+                                {
+                                    /*Reinicio de variables de textos*/
+                                    txtView_Servicio.setText("");
+                                    editText_descripcion.setText("");
+                                    txtView_Address.setText("");
+                                    editText_min.setText("");
+                                    editText_max.setText("");
 //                                latpos = Double.parseDouble("");
 //                                lngpos = Double.parseDouble("");
 
-                                /*Reset de arraylist image*/
-                                list = new ArrayList<String>();
+                                    /*Reset de arraylist image*/
+                                    list = new ArrayList<String>();
 
-                                UIDservice = "";
+                                    UIDservice = "";
 
-                                /*Ocultar progressbar*/
-                                waitingDialog.dismiss();
+                                    /*Ocultar progressbar*/
+                                    waitingDialog.dismiss();
 
-                                /*Mostrar mensaje de exito*/
-                                Toast.makeText (SolicitarServicioActivity.this, "Servicio solicitado con exito.", Toast.LENGTH_SHORT).show ();
+                                    /*Mostrar mensaje de exito*/
+                                    Toast.makeText (SolicitarServicioActivity.this, "Servicio solicitado con exito.", Toast.LENGTH_SHORT).show ();
+                                }
 
                             }
                         })

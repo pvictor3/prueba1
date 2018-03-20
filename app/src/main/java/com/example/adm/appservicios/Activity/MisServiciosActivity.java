@@ -1,5 +1,6 @@
 package com.example.adm.appservicios.Activity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -9,10 +10,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.adm.appservicios.Adapters.Adapter_services_required;
+import com.example.adm.appservicios.Fragments.MenuServicesFragment;
 import com.example.adm.appservicios.R;
 import com.example.adm.appservicios.getters_and_setters.Servicios_worker;
 import com.google.firebase.FirebaseApp;
@@ -73,47 +79,132 @@ public class MisServiciosActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
 
-        getServices();
+        /*Validar usuario para tipo de consulta a base de datos*/
+        if (settings.getString("Tipousuario","") == "Usuario")
+        {
+            Log.i("Servicios por ", "Trabajador");
+            getServices();
+        }
+        else
+        {
+            Log.i("Servicios por ", "Usuario");
+            getServicesUsuario();
+        }
 
     }
 
-    public void getServices(){
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // todo: goto back activity from here
+
+//                Intent intent = new Intent(MisServiciosActivity.this, MainActivity.class);
+//                intent.putExtra("id", "2");
+//                startActivity(intent);
+
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void getServices()
+    {
 
         final List services = new ArrayList();
         adapter = new Adapter_services_required(services);
 
-        /*Obtener ubicaciones existentes de base de datos*/
+        /*Obtener servicios de Trabajador*/
         ListenerRegistration listenerRegistration = db.collection("services")
-                .whereEqualTo("idusuario", settings.getString("UIDusuario",""))
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
+            .whereEqualTo("Telefono_atiende", settings.getString("Telefonousuario",""))
+            .whereEqualTo("Estatus", settings.getString("Pendiente",""))
+            .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                @Override
+                public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
 
-                        /*Validar si hay registro*/
-                        if (value.size() > 0) {
+                /*Validar si hay registro*/
+                if (value.size() > 0) {
 
-                            /*Recorrido de datos*/
-                            for (DocumentSnapshot doc : value) {
+                    /*Recorrido de datos*/
+                    for (DocumentSnapshot doc : value) {
 
-                                /*Se agrega datos de servicio a arraylist*/
-                                services.add(new Servicios_worker(doc.getId(), doc.getString("Descripcion"), doc.getString("Servicio"), doc.getString("Direccion"), doc.getString("Min")));
-                                adapter.notifyDataSetChanged();
-                            }
-
-                            recycler.setAdapter(adapter);
-
-                            /*Se oculta ProgressBar*/
-                            materialProgressBar.setIndeterminate(false);
-                            materialProgressBar.setVisibility(View.GONE);
-
-                        } else {
-                            /*No existen servicios registrados por usuario*/
-                            Log.i("Error", "No existe Direcciones para el usuario");
-
-                        }
-
+                        /*Se agrega datos de servicio a arraylist*/
+                        services.add(new Servicios_worker(doc.getId(), doc.getString("Descripcion"), doc.getString("Servicio"), doc.getString("Direccion"), doc.getString("Min")));
+                        adapter.notifyDataSetChanged();
                     }
-                });
+
+                    recycler.setAdapter(adapter);
+
+                    /*Se oculta ProgressBar*/
+                    materialProgressBar.setIndeterminate(false);
+                    materialProgressBar.setVisibility(View.GONE);
+
+                } else {
+                    /*No existen servicios registrados por usuario*/
+                    Log.i("Error", "No existe servicios para el usuario");
+
+                    /*Se oculta ProgressBar*/
+                    materialProgressBar.setIndeterminate(false);
+                    materialProgressBar.setVisibility(View.GONE);
+
+                    /*Mostrar mensaje de exito*/
+                    Toast.makeText (MisServiciosActivity.this, "No existen servicios.", Toast.LENGTH_SHORT).show ();
+
+                }
+
+                }
+            });
+    }
+
+    public void getServicesUsuario()
+    {
+        final List services = new ArrayList();
+        adapter = new Adapter_services_required(services);
+
+        /*Obtener servicios reigstrados de usuario*/
+        ListenerRegistration listenerRegistration = db.collection("services")
+            .whereEqualTo("idusuario", settings.getString("UIDusuario",""))
+            .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                @Override
+                public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
+
+                /*Validar si hay registro*/
+                if (value.size() > 0) {
+
+                    /*Recorrido de datos*/
+                    for (DocumentSnapshot doc : value) {
+
+                        /*Se agrega datos de servicio a arraylist*/
+                        services.add(new Servicios_worker(doc.getId(), doc.getString("Descripcion"), doc.getString("Servicio"), doc.getString("Direccion"), doc.getString("Min")));
+                        adapter.notifyDataSetChanged();
+                    }
+
+                    recycler.setAdapter(adapter);
+
+                    /*Se oculta ProgressBar*/
+                    materialProgressBar.setIndeterminate(false);
+                    materialProgressBar.setVisibility(View.GONE);
+
+                }
+                else
+                {
+                    /*No existen servicios registrados por usuario*/
+                    Log.i("Error", "No existe Direcciones para el usuario");
+
+                    /*Se oculta ProgressBar*/
+                    materialProgressBar.setIndeterminate(false);
+                    materialProgressBar.setVisibility(View.GONE);
+
+                    /*Mostrar mensaje de exito*/
+                    Toast.makeText (MisServiciosActivity.this, "No existen servicios.", Toast.LENGTH_SHORT).show ();
+
+                }
+
+                }
+            });
+
     }
 
 }

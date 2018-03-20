@@ -1,4 +1,4 @@
-<FrameLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -65,6 +65,35 @@
 
         </RelativeLayout>
 
+        <RelativeLayout
+            android:layout_below="@+id/bar2"
+            android:id="@+id/bar3"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_margin="30dp">
+
+            <ImageView
+                android:id="@+id/imageView_misPostulaciones"
+                android:src="@drawable/servicios_solicitados"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:scaleType="centerCrop"/>
+            <TextView
+                android:id="@+id/txtView_mis_postulaciones"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Postulaciones"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="20dp"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/actionbar_gradient_dark" />
+
+        </RelativeLayout>
+
+
     </RelativeLayout>
 
-</FrameLayout>
+</ScrollView>

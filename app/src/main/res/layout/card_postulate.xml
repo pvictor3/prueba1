@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="150dp">
+
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view_item"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="10dp"
+        card_view:cardCornerRadius="4dp"
+        card_view:elevation="14dp"
+        card_view:layout_constraintBottom_toBottomOf="parent"
+        card_view:layout_constraintHorizontal_bias="0.0"
+        card_view:layout_constraintLeft_toLeftOf="parent"
+        card_view:layout_constraintRight_toRightOf="parent"
+        card_view:layout_constraintTop_toTopOf="parent"
+        card_view:layout_constraintVertical_bias="1.0"
+        tools:layout_constraintBottom_creator="1"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintTop_creator="1">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/textTipo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:text="Plomero"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                card_view:layout_constraintLeft_toLeftOf="parent"
+                card_view:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textNombre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="13dp"
+                android:text="Nombre"
+                android:textColor="#0015ff"
+                card_view:layout_constraintLeft_toLeftOf="parent"
+                card_view:layout_constraintTop_toBottomOf="@+id/textTipo" />
+
+            <ImageView
+                android:layout_width="123dp"
+                android:layout_height="18dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="15dp"
+                android:src="@drawable/ic_raiting"
+                card_view:layout_constraintLeft_toLeftOf="parent"
+                card_view:layout_constraintTop_toBottomOf="@+id/textNombre" />
+
+            <TextView
+                android:id="@+id/txtView_card_service_id"
+                android:layout_width="0dp"
+                android:layout_height="0dp" />
+
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.CardView>
+
+</android.support.constraint.ConstraintLayout>

@@ -162,6 +162,42 @@ public class AccountActivity extends AppCompatActivity {
             progressDialog.setTitle("Uploading...");
             progressDialog.show();
 
+            /*Consultar si tiene imagen el usuario previamente para eliminacion*/
+//            db.collection("images")
+//                .whereEqualTo("idusuario", settings.getString("UIDusuario",""))
+//                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onEvent(@Nullable QuerySnapshot documentSnapshots, @Nullable FirebaseFirestoreException e) {
+//                        /*Validar si hay registro*/
+//                        if (documentSnapshots.size() > 0) {
+//                            /*Recorrido de datos*/
+//                            for (DocumentSnapshot doc : documentSnapshots)
+//                            {
+//                                Log.i("Nombre real time", doc.getString("name"));
+//
+//                                // Create a reference to the file to delete
+//                                StorageReference  desertRef = storageReference.child("Profile/" + doc.getString("name"));
+//
+//                                // Delete the file
+//                                desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                    @Override
+//                                    public void onSuccess(Void aVoid) {
+//                                        // File deleted successfully
+//                                    }
+//                                }).addOnFailureListener(new OnFailureListener() {
+//                                    @Override
+//                                    public void onFailure(@NonNull Exception exception) {
+//                                        // Uh-oh, an error occurred!
+//                                    }
+//                                });
+//
+//                            }
+//
+//                        }
+//
+//                    }
+//                });
+
             StorageReference ref = storageReference.child("Profile/"+ UUID.randomUUID().toString());
             ref.putFile(Uri.parse(String.valueOf(FilePathUri)))
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -176,9 +212,11 @@ public class AccountActivity extends AppCompatActivity {
                             Log.i("Uri upload image", "Uri: " + url);
                             Log.i("Name upload image", "Name: " + name);
 
+                            /*Se guarda registro en tabla images*/
                             UploadProfileImage info = new UploadProfileImage(name, url, settings.getString("UIDusuario",""));
                             db.collection("images").add(info);
 
+                            /*Se actualiza campo image_user de usuario*/
                             DocumentReference contact = db.collection("users").document(settings.getString("UIDusuario",""));
                             contact.update("Image_user", url)
                                     .addOnSuccessListener(new OnSuccessListener < Void > () {

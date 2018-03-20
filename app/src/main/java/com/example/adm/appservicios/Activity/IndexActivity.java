@@ -335,6 +335,19 @@ public class IndexActivity extends AppCompatActivity {
 
                                         }*/
 
+                                        /*Declaracion de session */
+                                        SharedPreferences settings = getSharedPreferences("sesion_user", MODE_PRIVATE);
+
+                                        SharedPreferences.Editor editor;
+                                        editor = settings.edit();
+                                        editor.putString("Nombreusuario" , doc.getString("Nombre"));
+                                        editor.putString("Telefonousuario" , doc.getString("Telefono"));
+                                        editor.putString("UIDusuario" , doc.getId());
+                                        editor.putString("Tipousuario" , doc.getString("Tipo_user"));
+                                        editor.putString("Logueadousuario" , "true");
+
+                                        editor.apply();
+
                                         SQLiteDatabase db = datab.getWritableDatabase();
 
                                         Cursor fila = db.rawQuery("select * from user WHERE uid = '"+String.valueOf(doc.getId())+"'", null);
@@ -350,18 +363,6 @@ public class IndexActivity extends AppCompatActivity {
 //                                            Log.i("Tipo_user", fila.getString(5));
 //                                            Log.i("Logueado", fila.getString(7));
 
-                                            /*Declaracion de session */
-                                            SharedPreferences settings = getSharedPreferences("sesion_user", MODE_PRIVATE);
-
-                                            SharedPreferences.Editor editor;
-                                            editor = settings.edit();
-                                            editor.putString("Nombreusuario" , fila.getString(1));
-                                            editor.putString("Telefonousuario" , fila.getString(2));
-                                            editor.putString("UIDusuario" , fila.getString(3));
-                                            editor.putString("Tipousuario" , fila.getString(5));
-                                            editor.putString("Logueadousuario" , fila.getString(7));
-
-                                            editor.apply();
 
                                             /*Validar si el usuario esta logueado*/
                                             /*if (Boolean.parseBoolean(fila.getString(7)))

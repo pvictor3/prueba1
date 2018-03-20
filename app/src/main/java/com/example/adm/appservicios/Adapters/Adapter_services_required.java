@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.adm.appservicios.Activity.PostulacionesActivity;
 import com.example.adm.appservicios.R;
 import com.example.adm.appservicios.getters_and_setters.Servicios_worker;
 
@@ -35,20 +36,23 @@ public class Adapter_services_required extends RecyclerView.Adapter<Adapter_serv
             super(itemView);
             context         = itemView.getContext();
             id              = (TextView) itemView.findViewById(R.id.txtView_card_service_id);
-            tag_servicio    = (TextView) itemView.findViewById(R.id.txtView_card_tag_serviceAsked);
+            tag_servicio    = (TextView) itemView.findViewById(R.id.textTipo);
             money           = (TextView) itemView.findViewById(R.id.txtView_card_service_money);
-            servicio        = (TextView) itemView.findViewById(R.id.txtView_card_serviceAsked);
+            servicio        = (TextView) itemView.findViewById(R.id.textNombre);
             zona            = (TextView) itemView.findViewById(R.id.txtView_card_service_zona);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Log.i("Informacion click", "Click en servicio");
-//                    final int position = getAdapterPosition();
-//                    CharSequence profesion = id.getText();
-//                    Intent intent = new Intent(itemView.getContext(), Activity_service.class);
-//                    intent.putExtra("id", profesion);
-//                    context.startActivity(intent);
+
+                    final int position = getAdapterPosition();
+//                    Log.i("Informacion click", String.valueOf(servicios.get(position).getId()));
+                    CharSequence profesion = id.getText();
+                    Log.i("Informacion click", String.valueOf(profesion));
+                    Intent intent = new Intent(itemView.getContext(), PostulacionesActivity.class);
+                    intent.putExtra("id", profesion);
+                    context.startActivity(intent);
                 }
             });
 

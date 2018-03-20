@@ -19,10 +19,15 @@ import com.example.adm.appservicios.R;
 
 public class MenuServicesFragment extends Fragment {
 
-    RelativeLayout card1, card2;
+    RelativeLayout card1, card2, card3;
 
     /*Declaracion inicial para default session user*/
     SharedPreferences settings;
+
+    public MenuServicesFragment() {
+        // Required empty public constructor
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,15 +41,21 @@ public class MenuServicesFragment extends Fragment {
 
         card1 = (RelativeLayout) v.findViewById(R.id.bar1);
         card2 = (RelativeLayout) v.findViewById(R.id.bar2);
+        card3 = (RelativeLayout) v.findViewById(R.id.bar3);
 
-        if (settings.getString("Tipousuario","") != "Usuario")
+        /*Validar si el usuario es trabajador o usuario normal*/
+        if (settings.getString("Tipousuario","") == "Usuario")
         {
-            card2.setVisibility(View.GONE);
+            card1.setVisibility(View.GONE);
+//            card2.setVisibility(View.GONE);
         }
-        else{
-            card2.setVisibility(View.VISIBLE);
-        }
+//        else
+//        {
+//            card1.setVisibility(View.GONE);
+//            card2.setVisibility(View.VISIBLE);
+//        }
 
+        /*click en card1*/
         card1.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -54,12 +65,42 @@ public class MenuServicesFragment extends Fragment {
             }
         });
 
+        /*click en card2*/
         card2.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                Log.i("Click", "Card2");
+                if (settings.getString("Tipousuario","") == "Usuario")
+                {
+                    Log.i("card2 Click como ", "Trabajador");
+                    /*Se mostrara las postulaciones del trabajador*/
+                }
+                else
+                {
+                    Log.i("card2 Click como ", "Usuario");
+                    /**/
+
+                }
                 Intent intent = new Intent(getActivity(), MisServiciosActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        card3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*Validar si el usuario es trabajador o usuario normal*/
+                if (settings.getString("Tipousuario","") == "Usuario")
+                {
+                    Log.i("card3 Click como ", "Trabajador");
+                    /*Se mostrara las postulaciones del trabajador*/
+                }
+                else
+                {
+                    Log.i("card3 Click como ", "Usuario");
+                    /**/
+
+                }
             }
         });
 
