@@ -152,4 +152,7 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="title_activity_postulaciones">PostulacionesActivity</string>
+    <string name="title_activity_postularse">PostularseActivity</string>
+    <string name="title_activity_viaje">ViajeActivity</string>
+    <string name="title_activity_viaje2">viaje2Activity</string>
 </resources>

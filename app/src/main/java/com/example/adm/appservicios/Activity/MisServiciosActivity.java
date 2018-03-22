@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.adm.appservicios.Adapters.Adapter_services_required;
+import com.example.adm.appservicios.Adapters.adapter_serviceswork;
 import com.example.adm.appservicios.Fragments.MenuServicesFragment;
 import com.example.adm.appservicios.R;
 import com.example.adm.appservicios.getters_and_setters.Servicios_worker;
@@ -79,16 +80,18 @@ public class MisServiciosActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
 
+        String tipouser = settings.getString("Tipousuario","");
+
         /*Validar usuario para tipo de consulta a base de datos*/
-        if (settings.getString("Tipousuario","") == "Usuario")
-        {
-            Log.i("Servicios por ", "Trabajador");
-            getServices();
-        }
-        else
+        if (tipouser.equals("Usuario"))
         {
             Log.i("Servicios por ", "Usuario");
             getServicesUsuario();
+        }
+        else
+        {
+            Log.i("Servicios por ", "Trabajador");
+            getServices();
         }
 
     }
@@ -99,9 +102,12 @@ public class MisServiciosActivity extends AppCompatActivity {
             case android.R.id.home:
                 // todo: goto back activity from here
 
-//                Intent intent = new Intent(MisServiciosActivity.this, MainActivity.class);
-//                intent.putExtra("id", "2");
-//                startActivity(intent);
+                /*Intent to Main, pass parameter id = 2*/
+                Intent intent = new Intent(MisServiciosActivity.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("id", "2");
+                startActivity(intent);
+                finish();
 
                 return true;
 
@@ -114,12 +120,12 @@ public class MisServiciosActivity extends AppCompatActivity {
     {
 
         final List services = new ArrayList();
-        adapter = new Adapter_services_required(services);
+        adapter = new adapter_serviceswork(services);
 
         /*Obtener servicios de Trabajador*/
         ListenerRegistration listenerRegistration = db.collection("services")
             .whereEqualTo("Telefono_atiende", settings.getString("Telefonousuario",""))
-            .whereEqualTo("Estatus", settings.getString("Pendiente",""))
+            .whereEqualTo("Estatus", "Pendiente")
             .addSnapshotListener(new EventListener<QuerySnapshot>() {
                 @Override
                 public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
@@ -142,8 +148,6 @@ public class MisServiciosActivity extends AppCompatActivity {
                     materialProgressBar.setVisibility(View.GONE);
 
                 } else {
-                    /*No existen servicios registrados por usuario*/
-                    Log.i("Error", "No existe servicios para el usuario");
 
                     /*Se oculta ProgressBar*/
                     materialProgressBar.setIndeterminate(false);

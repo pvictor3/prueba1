@@ -47,6 +47,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore:11.8.0'
     implementation 'com.firebaseui:firebase-ui-storage:0.6.0'
     implementation 'com.github.d-max:spots-dialog:0.7@aar'
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-scalars:2.3.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'

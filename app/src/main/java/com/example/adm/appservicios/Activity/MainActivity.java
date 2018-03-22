@@ -146,6 +146,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                 });
 
+        /*Se recibe id de servicio seleccionado*/
+        final Intent intent = getIntent();
+        String id = intent.getStringExtra("id");
+
         /*Click en imagen de perfil de usuario*/
         ImagePerfil.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,6 +163,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         /*Inicializacion de fragment default index*/
         fragmentclass = IndexFragment.class;
+
+        /*Validate id para mostrar vista de menuservices*/
+        if (id != null && id != "")
+        {
+            if (id.equals("2"))
+            {
+                fragmentclass = MenuServicesFragment.class;
+
+            }
+
+            id = "";
+            getIntent().removeExtra("id");
+        }
 
         try{
             fragment = (Fragment) fragmentclass.newInstance();
@@ -181,8 +198,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    /*click en imagen de perfil*/
     public void redirectAccount(){
-        Log.i("Click", "Image");
         Intent intent = new Intent(MainActivity.this, AccountActivity.class);
         startActivity(intent);
     }
@@ -277,11 +294,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         SharedPreferences.Editor editor;
         editor = settings.edit();
-        editor.putString("Nombreusuario" , "");
-        editor.putString("Telefonousuario" , "");
-        editor.putString("UIDusuario" , "");
-        editor.putString("Tipousuario" , "");
-        editor.putString("Logueadousuario" , "false");
+        editor.putString("Nombreusuario" , "").commit();
+        editor.putString("Telefonousuario" , "").commit();
+        editor.putString("UIDusuario" , "").commit();
+        editor.putString("Tipousuario" , "").commit();
+        editor.putString("Logueadousuario" , "false").commit();
 
         editor.apply();
 

@@ -27,7 +27,7 @@
             android:layout_height="80dp"
             android:layout_width="match_parent"
             android:id="@+id/navViewImageView_ProfilePicture"
-            android:src="@drawable/builder"
+            android:src="@drawable/user_default"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true">
         </ImageView>

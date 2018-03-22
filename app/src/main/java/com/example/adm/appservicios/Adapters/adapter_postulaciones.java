@@ -1,6 +1,7 @@
 package com.example.adm.appservicios.Adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +13,8 @@ import com.example.adm.appservicios.R;
 import com.example.adm.appservicios.getters_and_setters.workers;
 
 import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by Adm on 20/03/2018.
@@ -32,8 +35,8 @@ public class adapter_postulaciones extends RecyclerView.Adapter<adapter_postulac
             super(itemView);
             context         = itemView.getContext();
             id              = (TextView) itemView.findViewById(R.id.txtView_card_service_id);
-            nombre    = (TextView) itemView.findViewById(R.id.textNombre);
-            tipo           = (TextView) itemView.findViewById(R.id.textTipo);
+            nombre          = (TextView) itemView.findViewById(R.id.textNombre);
+            tipo            = (TextView) itemView.findViewById(R.id.textTipo);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

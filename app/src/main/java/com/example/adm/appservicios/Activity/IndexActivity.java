@@ -47,8 +47,8 @@ import dmax.dialog.SpotsDialog;
 public class IndexActivity extends AppCompatActivity {
 
     /*Declaracion de variables para inicializacion de firebase*/
-    private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mDatabaseReference;
+//    private FirebaseDatabase mFirebaseDatabase;
+//    private DatabaseReference mDatabaseReference;
     FirebaseFirestore db;
 
     private SQLiteHandler datab;

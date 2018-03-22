@@ -42,6 +42,18 @@
         <activity
             android:name=".Activity.PostulacionesActivity"
             android:label="@string/title_activity_postulaciones"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".Activity.PostularseActivity"
+            android:label="@string/title_activity_postularse"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".Activity.ViajeActivity"
+            android:label="@string/title_activity_viaje"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".Activity.viaje2Activity"
+            android:label="@string/title_activity_viaje2"
             android:theme="@style/AppTheme"></activity>
     </application>
 
