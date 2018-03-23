@@ -126,9 +126,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 editor.putString("Telefonousuario" , doc.getString("Telefono"));
                                 editor.putString("Tipousuario" , doc.getString("Tipo_user"));
 
-                                Log.i("Imagen de perfil" , doc.getString("Image_user"));
+                                // Log.i("Imagen de perfil" , doc.getString("Image_user"));
 
-                                if (doc.getString("Image_user") != "")
+                                if (doc.getString("Image_user") != "" && doc.getString("Image_user") != null)
                                 {
                                     // Reference to an image file in Firebase Storage
                                     StorageReference storageReference = storage.getReferenceFromUrl(doc.getString("Image_user"));
