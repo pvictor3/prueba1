@@ -54,7 +54,8 @@
         <activity
             android:name=".Activity.viaje2Activity"
             android:label="@string/title_activity_viaje2"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+        <activity android:name=".Activity.ChatActivity"></activity>
     </application>
 
 </manifest>

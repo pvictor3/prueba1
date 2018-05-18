@@ -155,4 +155,5 @@
     <string name="title_activity_postularse">PostularseActivity</string>
     <string name="title_activity_viaje">ViajeActivity</string>
     <string name="title_activity_viaje2">viaje2Activity</string>
+    <string name="warning_invalid_search">Término no válido</string>
 </resources>
