@@ -21,7 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.adm.appservicios.Database.SQLiteHandler;
-import com.example.adm.appservicios.Helpers.User;
+
 import com.example.adm.appservicios.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;

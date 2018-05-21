@@ -33,9 +33,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyD26YZMMIDQPxlRU_r-Rd-ESL1xu17XAIw" />
 
-        <activity
-            android:name=".Activity.MapsActivity"
-            android:label="@string/title_activity_maps" />
         <activity android:name=".Activity.AccountActivity" />
         <activity android:name=".Activity.SolicitarServicioActivity" />
         <activity android:name=".Activity.MisServiciosActivity" />
@@ -50,10 +47,6 @@
         <activity
             android:name=".Activity.ViajeActivity"
             android:label="@string/title_activity_viaje"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".Activity.viaje2Activity"
-            android:label="@string/title_activity_viaje2"
             android:theme="@style/AppTheme" />
         <activity android:name=".Activity.ChatActivity"></activity>
     </application>

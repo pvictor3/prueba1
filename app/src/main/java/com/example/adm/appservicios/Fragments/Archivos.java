@@ -29,7 +29,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.adm.appservicios.Activity.SolicitarServicioActivity;
-import com.example.adm.appservicios.Adapters.Adapter_docs;
 import com.example.adm.appservicios.Helpers.UploadCitaImage;
 import com.example.adm.appservicios.Helpers.UploadInfoImage;
 import com.example.adm.appservicios.R;
@@ -77,7 +76,6 @@ public class Archivos extends Fragment {
     private ImageView data_base_doc2;
     private ImageView data_base_doc3;
     private ProgressDialog progressDialog;
-    private Adapter_docs adapter;
 
     /*Arraylsit image*/
     List<String> list;

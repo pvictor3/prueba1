@@ -49,7 +49,7 @@ import android.widget.Toast;
 import com.example.adm.appservicios.Database.SQLiteHandler;
 import com.example.adm.appservicios.Fragments.IndexFragment;
 import com.example.adm.appservicios.Fragments.MenuServicesFragment;
-import com.example.adm.appservicios.Helpers.Address;
+
 import com.example.adm.appservicios.Helpers.CheatSheet;
 import com.example.adm.appservicios.Helpers.UploadInfoImage;
 import com.example.adm.appservicios.R;

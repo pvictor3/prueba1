@@ -29,9 +29,9 @@ import com.example.adm.appservicios.Fragments.IndexFragment;
 import com.example.adm.appservicios.Fragments.InfoFragment;
 import com.example.adm.appservicios.Fragments.MenuServicesFragment;
 import com.example.adm.appservicios.Fragments.PagosFragment;
-import com.example.adm.appservicios.Fragments.ProfileFragment;
+
 import com.example.adm.appservicios.Fragments.RegisterOficioFragment;
-import com.example.adm.appservicios.Fragments.ServicesFragment;
+
 import com.example.adm.appservicios.Fragments.UbicacionesFragment;
 import com.example.adm.appservicios.R;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
