@@ -1,6 +1,7 @@
 package com.example.adm.appservicios.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -9,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.adm.appservicios.Activity.ChatActivity;
+import com.example.adm.appservicios.Activity.PostulacionesActivity;
 import com.example.adm.appservicios.R;
 import com.example.adm.appservicios.getters_and_setters.workers;
 
@@ -23,6 +26,8 @@ import static android.content.Context.MODE_PRIVATE;
 public class adapter_postulaciones extends RecyclerView.Adapter<adapter_postulaciones.PostuladosViewHolder>{
 
     private List<workers> servicios;
+
+
 
     public static class PostuladosViewHolder extends RecyclerView.ViewHolder{
         public TextView id;
@@ -50,6 +55,11 @@ public class adapter_postulaciones extends RecyclerView.Adapter<adapter_postulac
 //                    Intent intent = new Intent(itemView.getContext(), PostulacionesActivity.class);
 //                    intent.putExtra("id", profesion);
 //                    context.startActivity(intent);
+
+                    /*Se abre ventana de chat*/
+                    Intent intent = new Intent(itemView.getContext(), ChatActivity.class);
+                    intent.putExtra("id", profesion);
+                    context.startActivity(intent);
                 }
             });
 

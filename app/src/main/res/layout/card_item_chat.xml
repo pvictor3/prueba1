@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_msg_chat_user"
+        android:layout_alignParentEnd="false">
+        <TextView
+            android:id="@+id/chat_item_msg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:textSize="16dp"
+            android:textColor="@android:color/primary_text_light"
+            android:text="Prueba mensaje"/>
+    </FrameLayout>
+
+</RelativeLayout>
