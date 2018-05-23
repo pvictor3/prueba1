@@ -18,9 +18,11 @@ import android.widget.Toast;
 
 import com.example.adm.appservicios.Adapters.ChatRecyclerViewAdapter;
 import com.example.adm.appservicios.R;
+import com.example.adm.appservicios.getters_and_setters.MensajeChat;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -47,8 +49,9 @@ public class ChatActivity extends AppCompatActivity {
     private String idusu;
     private String idTrab;
     private String tipoUser;
+    private String idServ;
 
-    private ArrayList<String> mensajes = new ArrayList<>();
+    private ArrayList<MensajeChat> mensajes = new ArrayList<>();
 
 
     @Override
@@ -72,12 +75,23 @@ public class ChatActivity extends AppCompatActivity {
         /*Recibir idusu_trab*/
         settings = this.getSharedPreferences("sesion_user", MODE_PRIVATE);
         tipoUser = settings.getString("Tipousuario", "");
-        idusu = settings.getString("UIDusuario","");
-        Log.d("chatActivity", "onCreate: UID = " + idusu);
 
-        /*Obtener id de trabajador*/
         final Intent intent = getIntent();
-        idTrab = intent.getStringExtra("id");
+
+        if(tipoUser.equals("Usuario")){
+            idusu = settings.getString("UIDusuario","");
+
+            /*Obtener id de trabajador*/
+            idTrab = intent.getStringExtra("id");
+
+            //Obtener id de servicios para regresar
+            idServ = intent.getStringExtra("idServ");
+        }else{
+            idTrab = settings.getString("UIDusuario", "");
+            idusu = intent.getStringExtra("ejemploID");
+        }
+        Log.d("chatActivity", "onCreate: TIPO = " + tipoUser);
+        Log.d("chatActivity", "onCreate: UID = " + idusu);
         Log.d("chatActivity", "onCreate: TID = " + idTrab);
 
 
@@ -87,6 +101,12 @@ public class ChatActivity extends AppCompatActivity {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final boolean emisor;
+                if(tipoUser.equals("Usuario")){
+                    emisor = true;
+                }else{
+                    emisor = false;
+                }
                 String message = ((EditText)findViewById(R.id.chat_edit)).getText().toString();
                 final Map<String, Object> msg = new HashMap<>();
                 msg.put("idusuario", idusu);
@@ -94,15 +114,21 @@ public class ChatActivity extends AppCompatActivity {
                 msg.put("mensaje", message);
                 String fecha = String.valueOf(System.currentTimeMillis());
                 msg.put("fecha", fecha);
+                msg.put("emisor",emisor);
                 db.collection("chat").add(msg).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentReference> task) {
                         if(task.isSuccessful()){
                             //getAllMsg();
-                            mensajes.add(msg.get("mensaje").toString());
-                            recyclerViewAdapter.notifyDataSetChanged();
-                            recyclerView.setAdapter(recyclerViewAdapter);
-                            recyclerView.smoothScrollToPosition(recyclerViewAdapter.getItemCount());
+                            /*mensajes.add(new MensajeChat(idusu,
+                                                            idTrab,
+                                                            msg.get("fecha").toString(),
+                                                            msg.get("mensaje").toString(),
+                                                            emisor));
+                            //recyclerViewAdapter.notifyDataSetChanged();
+                            //recyclerView.setAdapter(recyclerViewAdapter);
+                            recyclerViewAdapter.notifyItemInserted(mensajes.size() - 1);*/
+
                             Log.d("chatActivity", "onComplete: Mensaje enviado " + msg.get("mensaje"));
                             ((EditText)findViewById(R.id.chat_edit)).setText("");
                         }
@@ -116,13 +142,16 @@ public class ChatActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 // todo: goto back activity from here
-
+                if(tipoUser.equals("Usuario")){
                 Intent intent = new Intent(ChatActivity.this, PostulacionesActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("id", "Hz17RmuOKHfD1dBbFHPE"); /*Obtener id del servicio*/
+                intent.putExtra("id", idServ); /*Obtener id del servicio*/
                 startActivity(intent);
                 finish();
-                return true;
+                return true;}else{
+                    Intent intent = new Intent(ChatActivity.this, MisServiciosActivity.class);
+                    startActivity(intent);
+                }
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -139,20 +168,49 @@ public class ChatActivity extends AppCompatActivity {
         getAllMsg();
     }
 
-    private void getAllMsg(){
+    private void getAllMsg() {
 
-        recyclerViewAdapter = new ChatRecyclerViewAdapter(mensajes);
-        chatQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                for(DocumentSnapshot document : task.getResult()){
-                    String mensaje = document.getString("mensaje");
-                    mensajes.add(mensaje);
-                    recyclerViewAdapter.notifyDataSetChanged();
-                }
-                recyclerView.setAdapter(recyclerViewAdapter);
-                recyclerView.smoothScrollToPosition(recyclerViewAdapter.getItemCount());
-            }
-        });
+        recyclerViewAdapter = new ChatRecyclerViewAdapter(mensajes, tipoUser);
+        recyclerView.setAdapter(recyclerViewAdapter);
+
+        db.collection("chat").whereEqualTo("idusuario", idusu)
+                .whereEqualTo("idservice", idTrab)
+                .orderBy("fecha", Query.Direction.ASCENDING)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+                        // Handle errors
+                        if (e != null) {
+                            Log.w("chatActivity", "onEvent:error", e);
+                            return;
+                        }
+                        // Dispatch the event
+                        for (DocumentChange change : documentSnapshots.getDocumentChanges()) {
+                            // Snapshot of the changed document
+                            DocumentSnapshot snapshot = change.getDocument();
+
+                            switch (change.getType()) {
+                                case ADDED:
+                                    // TODO: handle document added
+                                    onDocumentAdded(change);
+                                    break;
+                            }
+                        }
+                    }
+                });
+
+    }
+
+    protected void onDocumentAdded(DocumentChange change) {
+        DocumentSnapshot document = change.getDocument();
+        MensajeChat mensaje = new MensajeChat(document.getString("idusuario"),
+                document.getString("idservice"),
+                document.getString("fecha"),
+                document.getString("mensaje"),
+                document.getBoolean("emisor"));
+        mensajes.add(mensaje);
+        recyclerViewAdapter.notifyItemInserted(mensajes.size() - 1);
+        recyclerView.smoothScrollToPosition(recyclerViewAdapter.getItemCount());
+        Log.d("chatActivity", "onDocumentAdded: Mensaje recibido: " + mensaje.getMensaje());
     }
 }

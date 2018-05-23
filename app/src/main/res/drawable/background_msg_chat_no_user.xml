@@ -4,7 +4,7 @@
 
     <!-- view background color -->
     <!--<solid android:color="@color/bg_msg_from" >-->
-    <solid android:color="#80e27e" >
+    <solid android:color="#eaeaea" >
     </solid>
 
     <corners android:radius="20dp" >

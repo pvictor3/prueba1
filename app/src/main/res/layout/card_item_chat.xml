@@ -1,23 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="8dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
-    <FrameLayout
+
+    <TextView
+        android:id="@+id/chat_item_msg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/background_msg_chat_user"
-        android:layout_alignParentEnd="false">
-        <TextView
-            android:id="@+id/chat_item_msg"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:textSize="16dp"
-            android:textColor="@android:color/primary_text_light"
-            android:text="Prueba mensaje"/>
-    </FrameLayout>
+        android:padding="8dp"
+        android:text="Prueba mensaje"
+        android:textColor="@android:color/primary_text_light"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/chat_hora"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/chat_item_msg"
+        android:layout_below="@+id/chat_item_msg"
+        android:text="4:20" />
+
 
 </RelativeLayout>

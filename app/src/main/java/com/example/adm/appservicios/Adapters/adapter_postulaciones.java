@@ -26,7 +26,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class adapter_postulaciones extends RecyclerView.Adapter<adapter_postulaciones.PostuladosViewHolder>{
 
     private List<workers> servicios;
-
+    private String idServices; /*Para poder regresar de ChatActivity*/
 
 
     public static class PostuladosViewHolder extends RecyclerView.ViewHolder{
@@ -34,7 +34,8 @@ public class adapter_postulaciones extends RecyclerView.Adapter<adapter_postulac
         public TextView nombre;
         public TextView tipo;
         private Context context;
-
+        /*idServicio para regresar*/
+        public String idServ;
 
         private PostuladosViewHolder(final View itemView) {
             super(itemView);
@@ -59,6 +60,7 @@ public class adapter_postulaciones extends RecyclerView.Adapter<adapter_postulac
                     /*Se abre ventana de chat*/
                     Intent intent = new Intent(itemView.getContext(), ChatActivity.class);
                     intent.putExtra("id", profesion);
+                    intent.putExtra("idServ",idServ);
                     context.startActivity(intent);
                 }
             });
@@ -66,8 +68,9 @@ public class adapter_postulaciones extends RecyclerView.Adapter<adapter_postulac
         }
     }
 
-    public adapter_postulaciones(List<workers> servicios) {
+    public adapter_postulaciones(List<workers> servicios, String idServices) { /*Parametro id de servicios*/
         this.servicios = servicios;
+        this.idServices = idServices;
     }
 
     @Override
@@ -85,6 +88,7 @@ public class adapter_postulaciones extends RecyclerView.Adapter<adapter_postulac
         holder.id.setText(servicios.get(position).getId());
         holder.nombre.setText(servicios.get(position).getNombre());
         holder.tipo.setText(servicios.get(position).getTipo_user());
+        holder.idServ = this.idServices;
     }
 
     @Override

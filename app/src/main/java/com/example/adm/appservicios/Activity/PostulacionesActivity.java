@@ -98,7 +98,7 @@ public class PostulacionesActivity extends AppCompatActivity {
     private void getPostulaciones(String id)
     {
         final List services = new ArrayList();
-        adapter = new adapter_postulaciones(services);
+        adapter = new adapter_postulaciones(services, id); /*Enviar id al adapter para pasarselo a ChatActivity y pueda regresar*/
 
         /*Obtener servicios de Trabajador*/
         ListenerRegistration listenerRegistration = db.collection("postulaciones_service")
