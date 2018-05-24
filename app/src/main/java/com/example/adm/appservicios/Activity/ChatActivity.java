@@ -149,8 +149,7 @@ public class ChatActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
                 return true;}else{
-                    Intent intent = new Intent(ChatActivity.this, MisServiciosActivity.class);
-                    startActivity(intent);
+                    finish();
                 }
 
             default:

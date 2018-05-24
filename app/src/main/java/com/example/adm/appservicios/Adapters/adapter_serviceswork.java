@@ -58,24 +58,17 @@ public class adapter_serviceswork extends RecyclerView.Adapter<adapter_servicesw
 //                    Log.i("Informacion click", "Click en serviciowork");
 
                     /*Declaracion de session */
-                    /*settings = context.getSharedPreferences("sesion_user", MODE_PRIVATE);
+                    settings = context.getSharedPreferences("sesion_user", MODE_PRIVATE);
                     String idusuario = settings.getString("Tipousuario","");
 
-                    final CharSequence profesion = id.getText();*/
+                    final CharSequence profesion = id.getText();
 
                     /*Intent to Main, pass parameter id = 2*/
-                    /*Intent intent = new Intent(itemView.getContext(), ViajeActivity.class);
+                    Intent intent = new Intent(itemView.getContext(), ViajeActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra("idservice", profesion);
                     intent.putExtra("idusuario", idusuario);
-                    context.startActivity(intent);*/
-
-                    /*Prueba llamada a chat*/
-                    Intent intent = new Intent(itemView.getContext(), ChatActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra("ejemploID", "hbTZYwM732Uga9lpaTpE");
                     context.startActivity(intent);
-
                 }
             });
         }

@@ -51,6 +51,7 @@
         <activity android:name=".Activity.ChatActivity">
             android:theme="@style/AppTheme"
         </activity>
+        <activity android:name=".Activity.MisPostulacionesActivity"></activity>
     </application>
 
 </manifest>

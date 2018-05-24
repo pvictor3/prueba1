@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.example.adm.appservicios.Activity.MainActivity;
+import com.example.adm.appservicios.Activity.MisPostulacionesActivity;
 import com.example.adm.appservicios.Activity.MisServiciosActivity;
 import com.example.adm.appservicios.Activity.PostularseActivity;
 import com.example.adm.appservicios.Activity.SolicitarServicioActivity;
@@ -20,7 +21,7 @@ import com.example.adm.appservicios.R;
 
 public class MenuServicesFragment extends Fragment {
 
-    RelativeLayout card1, card2, card3;
+    RelativeLayout card1, card2, card3,card4;
 
     /*Declaracion inicial para default session user*/
     SharedPreferences settings;
@@ -43,6 +44,7 @@ public class MenuServicesFragment extends Fragment {
         card1 = (RelativeLayout) v.findViewById(R.id.bar1);
         card2 = (RelativeLayout) v.findViewById(R.id.bar2);
         card3 = (RelativeLayout) v.findViewById(R.id.bar3);
+        card4 = v.findViewById(R.id.bar4);
 
         String tipousu = settings.getString("Tipousuario","");
 
@@ -52,12 +54,15 @@ public class MenuServicesFragment extends Fragment {
             Log.i("es ", " usuario");
             card1.setVisibility(View.VISIBLE);
             card3.setVisibility(View.GONE);
+            card4.setVisibility(View.GONE);
         }
         else
         {
             Log.i("es ", " trabajador");
             card1.setVisibility(View.GONE);
             card2.setVisibility(View.VISIBLE);
+            card3.setVisibility(View.VISIBLE);
+            card4.setVisibility(View.VISIBLE);
         }
 
         /*click en card1*/
@@ -81,6 +86,14 @@ public class MenuServicesFragment extends Fragment {
         });
 
         card3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), MisPostulacionesActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        card4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 /*Redireccionar a vista para postularse*/
