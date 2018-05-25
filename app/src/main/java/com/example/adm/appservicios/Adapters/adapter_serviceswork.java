@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.adm.appservicios.Activity.ChatActivity;
 import com.example.adm.appservicios.Activity.MainActivity;
+import com.example.adm.appservicios.Activity.MapsActivity;
 import com.example.adm.appservicios.Activity.MisServiciosActivity;
 import com.example.adm.appservicios.Activity.ViajeActivity;
 import com.example.adm.appservicios.R;
@@ -64,10 +65,11 @@ public class adapter_serviceswork extends RecyclerView.Adapter<adapter_servicesw
                     final CharSequence profesion = id.getText();
 
                     /*Intent to Main, pass parameter id = 2*/
-                    Intent intent = new Intent(itemView.getContext(), ViajeActivity.class);
+                    Intent intent = new Intent(itemView.getContext(), MapsActivity.class); /*Abre miMapa*/
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra("idservice", profesion);
-                    intent.putExtra("idusuario", idusuario);
+                    //intent.putExtra("idservice", profesion);
+                    //intent.putExtra("idusuario", idusuario);
+                    intent.putExtra("direccion",zona.getText().toString());
                     context.startActivity(intent);
                 }
             });
