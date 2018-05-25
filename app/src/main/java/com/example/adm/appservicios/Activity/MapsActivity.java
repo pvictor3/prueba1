@@ -66,8 +66,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleApiClient googleApiClient;
     private Location userLocation;
     private LocationRequest mLocationRequest;
-    private long UPDATE_INTERVAL = 1000; /* 1.0 segundos*/
-    private long FASTEST_INTERVAL = 100; /* 0.1 segundos*/
+    private long UPDATE_INTERVAL = 5000;
+    private long FASTEST_INTERVAL = 4000;
 
     private GoogleMap mMap;
     SupportMapFragment mapFragment;
@@ -86,6 +86,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LatLng myLocation;
 
     IGoogleAPI mService;
+
+    /*Animation car*/
+    private boolean isFirstPosition = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,6 +148,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setBuildingsEnabled(false);
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
+        mMap.clear();
         // Add a marker in User Coordinates and move the camera
         final LatLng userCoordinates = new LatLng(userLocation.getLatitude(), userLocation.getLongitude());
         //mMap.addMarker(new MarkerOptions().position(userCoordinates).title("My location"));
@@ -152,6 +156,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .position(userCoordinates)
                 .flat(true)
                 .title("Posicion actual")
+                .anchor(0.5f,0.5f)
+                .rotation(-90.0f)
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_car_top_view))
         );
         mMap.moveCamera(CameraUpdateFactory.newLatLng(userCoordinates));
@@ -417,7 +423,60 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onLocationChanged(Location location) {
-        marker.setPosition(new LatLng(location.getLatitude(), location.getLongitude()));
-        Log.d("mapsActivity", "onLocationChanged: Nueva posicion obtenida!");
+        //marker.setPosition(new LatLng(location.getLatitude(), location.getLongitude()));
+        Log.d("mapsActivity", "onLocationChanged: Nueva posicion obtenida! ");
+
+        if(isFirstPosition){
+            startPosition = new LatLng(location.getLatitude(), location.getLongitude());
+            marker.setPosition(startPosition);
+            mMap.moveCamera(CameraUpdateFactory
+                    .newCameraPosition(new CameraPosition.Builder()
+                                                            .target(startPosition)
+                                                            .zoom(15.5f)
+                                                            .build()
+                    ));
+            isFirstPosition = false;
+        }else{
+            endPosition = new LatLng(location.getLatitude(),location.getLongitude());
+            if(startPosition.equals(endPosition)){
+                Log.d("mapsActivity", "onLocationChanged: MISMAS COORDENADAS");
+            }else{
+                Log.d("mapsActivity", "onLocationChanged: COORDENADAS DIFERENTES");
+                startAnimation(startPosition, endPosition);
+            }
+
+        }
+
+    }
+
+    private void startAnimation(final LatLng start, final LatLng end) {
+        Log.d("mapsActivity", "startAnimation: LLAMADA");
+        final ValueAnimator valueAnimator = ValueAnimator.ofInt(0,10);
+        valueAnimator.setDuration(3000);
+        valueAnimator.setInterpolator(new LinearInterpolator());
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                if(v>=0.6f){
+                v = animation.getAnimatedFraction();
+                Log.d("mapsActivity", "onAnimationUpdate: " + v);
+                lng = v * end.longitude + (1 - v) * start.longitude;
+                lat = v * end.latitude + (1 - v) * start.latitude;
+
+                LatLng newPos = new LatLng(lat,lng);
+                marker.setPosition(newPos);
+                marker.setAnchor(0.5f, 0.5f);
+                marker.setRotation(getBearing(start, end) - 90);
+
+                /*mMap.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
+                                                                                    .target(newPos)
+                                                                                    .zoom(15.5f)
+                                                                                    .build()
+                ));*/
+
+                startPosition = marker.getPosition();}
+            }
+        });
+        valueAnimator.start();
     }
 }
