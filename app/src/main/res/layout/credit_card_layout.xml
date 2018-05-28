@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#eaeaea">
+
+    <RelativeLayout
+        android:id="@+id/credit_card_first"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@id/image_credit_card"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/textCardNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CardNumber" />
+
+        <EditText
+            android:id="@+id/edtCardNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textCardNumber"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/background_edt_credit_card"
+            android:inputType="number"
+            android:textColor="@android:color/primary_text_light"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textExpirationDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/edtCardNumber"
+            android:layout_marginTop="16dp"
+            android:text="Expiration date" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textExpirationDate"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/edtCardMonth"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/background_edt_credit_card"
+                android:inputType="number"
+                android:textColor="@android:color/primary_text_light" />
+
+            <View
+                android:layout_width="30dp"
+                android:layout_height="match_parent" />
+
+            <EditText
+                android:id="@+id/edtCardyear"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/background_edt_credit_card"
+                android:inputType="number"
+                android:textColor="@android:color/primary_text_light" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/image_credit_card"
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@id/credit_card_first"
+        android:layout_alignParentEnd="true"
+        android:paddingLeft="8dp"
+        android:src="@drawable/visa_mastercard" />
+
+    <TextView
+        android:id="@+id/textCardName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/image_credit_card"
+        android:layout_marginTop="4dp"
+        android:paddingLeft="8dp"
+        android:text="Cardholder name" />
+
+    <EditText
+        android:id="@+id/edtCardName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textCardName"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/background_edt_credit_card"
+        android:textColor="@android:color/primary_text_light"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+</RelativeLayout>

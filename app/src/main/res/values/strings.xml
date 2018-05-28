@@ -6,7 +6,12 @@
 
     <string name="action_settings">Settings</string>
 
+    <!-- KEY para obtener polyline entre dos puntos-->
     <string name="google_directions_key">AIzaSyCAaLooco7bxM5IE9PhzYeA5RbEtPhIp6M</string>
+    
+    <!-- Datos para crear canal de notificaciones-->
+    <string name="channel_name">NotificacionesMapa</string>
+    <string name="channel_description">Manda una notificacion al llegar al destino</string>
 
     <!-- Menu -->
     <string name="builder">Registrarse como persona de oficio</string>
