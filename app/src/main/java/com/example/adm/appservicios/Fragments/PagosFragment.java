@@ -31,7 +31,7 @@ public class PagosFragment extends Fragment {
 
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        
+
         return v;
     }
 
